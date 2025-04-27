@@ -3,6 +3,7 @@ import Home from '../views/Home';
 import Login from '../views/Login';
 import Register from '../views/Register';
 import Perfil from '../views/Perfil';
+import Products from '../views/Products'
 import AdminDashboard from '../views/AdminDashboard';
 
 export default function AppRouter() {
@@ -14,6 +15,7 @@ export default function AppRouter() {
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/perfil" element={<Perfil />} />
+        <Route path="/products" element={<Products />} />
       </Routes>
     </BrowserRouter>
   );
