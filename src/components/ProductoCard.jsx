@@ -1,22 +1,19 @@
 import React from 'react';
 
-export default function ProductoCard({ producto }) {
+export default function ProductoCard({ producto, reverse }) {
   return (
-    <div className="card">
-      <div className="card-img">
+    <div className={`producto-card ${reverse ? 'reverse' : ''}`}>
+      <div className="producto-card-img">
         <img src={producto.ImagenUrl} alt={producto.Nombre} />
       </div>
-      <div className="card-body">
-        <div>
-          <h3 className="card-title">{producto.Nombre}</h3>
-          <p className="card-desc">{producto.Descripcion}</p>
-          <p className="card-price">₡{producto.Precio.toLocaleString('es-CR')}</p>
-        </div>
-        
+      <div className="producto-card-info">
+        <h3 className="producto-card-title">{producto.Nombre}</h3>
+        <p className="producto-card-desc">{producto.Descripcion}</p>
+        <p className="producto-card-price">₡{producto.Precio.toLocaleString('es-CR')}</p>
         {producto.Activo ? (
-          <button className="card-button">+ Agregar</button>
+          <button className="producto-card-button">+ Añadir al carrito</button>
         ) : (
-          <button className="card-button" disabled>No disponible</button>
+          <button className="producto-card-button" disabled>No disponible</button>
         )}
       </div>
     </div>
