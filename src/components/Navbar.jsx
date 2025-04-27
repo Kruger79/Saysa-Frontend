@@ -18,6 +18,7 @@ export default function Navbar() {
     navigate('/');
   };
 
+  
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top w-100 shadow-sm">
       <div className="container-fluid px-4 d-flex justify-content-between align-items-center">
@@ -37,7 +38,7 @@ export default function Navbar() {
             <Link to="/pedidos" className={`nav-link ${isActive('/pedidos') ? 'active text-info' : 'text-white'}`}>
               Pedidos
             </Link>
-            <Link to="/" className={`nav-link ${isActive('/') ? 'active text-info' : 'text-white'}`}>
+            <Link to="/" className={`nav-link ${isActive('/productos') ? 'active text-info' : 'text-white'}`}>
               Catálogo
             </Link>
           </div>

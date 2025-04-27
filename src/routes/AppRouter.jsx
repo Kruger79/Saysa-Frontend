@@ -14,6 +14,7 @@ export default function AppRouter() {
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/perfil" element={<Perfil />} />
+        
       </Routes>
     </BrowserRouter>
   );
