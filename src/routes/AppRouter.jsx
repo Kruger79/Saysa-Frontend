@@ -16,6 +16,7 @@ export default function AppRouter() {
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/products" element={<Products />} />
+        
       </Routes>
     </BrowserRouter>
   );
