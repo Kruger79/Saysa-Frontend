@@ -6,6 +6,7 @@ import Perfil from "../views/Perfil";
 import Products from "../views/Products";
 import AdminDashboard from "../views/AdminDashboard";
 import Usuarios from "../views/Usuarios";
+import Carrito from "../views/Carrito";
 
 export default function AppRouter() {
   return (
@@ -18,6 +19,8 @@ export default function AppRouter() {
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/products" element={<Products />} />
         <Route path="/admin/usuarios" element={<Usuarios />} />
+        <Route path="/carrito" element={<Carrito />} />
+
       </Routes>
     </BrowserRouter>
   );
