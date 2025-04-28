@@ -8,7 +8,7 @@ import logo from "../../public/logo-saysa.png";
 export default function Register() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  
+
   // Estado para los datos
   const [formData, setFormData] = useState({
     nombre: "",
@@ -49,7 +49,8 @@ export default function Register() {
         setLoading(false);
       }, 1200); // 1.5 segundos
     } catch (error) {
-      const mensaje = error.response?.data?.error || 'Error al registrar usuario';
+      const mensaje =
+        error.response?.data?.error || "Error al registrar usuario";
       toast.error(mensaje);
       setLoading(false);
     }

@@ -1,0 +1,123 @@
+.usuarios-page {
+  background: #f9fafb;
+  min-height: 100vh;
+  padding-top: 70px;
+}
+
+.usuarios-container {
+  margin-left: 220px;
+  /* Para no tapar el sidebar */
+  padding: 4rem 2rem 2rem 2rem;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* CENTRAR horizontalmente */
+}
+
+.usuarios-header {
+  width: 100%;
+  max-width: 1200px;
+  /* 🔥 Máximo ancho para no verse muy estirada */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.usuarios-header h1 {
+  font-size: 2rem;
+  color: #111827;
+}
+
+.usuarios-button {
+  background-color: #22c55e;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.usuarios-button:hover {
+  background-color: #16a34a;
+}
+
+.usuarios-table {
+  width: 100%;
+  max-width: 1200px;
+  /* 🔥 Igual, máximo ancho */
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border-collapse: collapse;
+}
+
+.usuarios-table th,
+.usuarios-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.usuarios-table th {
+  background-color: #f3f4f6;
+  font-weight: bold;
+  color: #374151;
+  font-size: 1rem;
+}
+
+.rol-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+/* Para las badges de rol */
+.rol-badge.cliente {
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 0.4rem 0.8rem;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+
+.rol-badge.admin {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 0.4rem 0.8rem;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.editar-boton {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.editar-boton:hover {
+  background: #2563eb;
+}
+
+.rol-select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}

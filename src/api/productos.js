@@ -1,6 +1,6 @@
-import api from './axios';
+import api from "./axios";
 
 export async function obtenerProductos() {
-  const response = await api.get('/productos');
+  const response = await api.get("/productos");
   return response.data;
 }

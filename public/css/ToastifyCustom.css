@@ -1,36 +1,39 @@
 /* Customiza los toasts */
 .Toastify__toast {
-    border-radius: 12px !important;
-    font-family: 'Poppins', sans-serif;
-    padding: 1rem !important;
-    font-size: 0.95rem;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  border-radius: 12px !important;
+  font-family: 'Poppins', sans-serif;
+  padding: 1rem !important;
+  font-size: 0.95rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Cambiar fondo de éxito */
+.Toastify__toast--success {
+  background-color: #10b981 !important;
+  /* Verde tipo SaYSa */
+  color: #ffffff;
+}
+
+/* Cambiar fondo de error */
+.Toastify__toast--error {
+  background-color: #ef4444 !important;
+  /* Rojo elegante */
+  color: #ffffff;
+}
+
+/* Personaliza la animación */
+.Toastify__slide-enter {
+  animation: slideIn 0.4s ease forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
   }
-  
-  /* Cambiar fondo de éxito */
-  .Toastify__toast--success {
-    background-color: #10b981 !important; /* Verde tipo SaYSa */
-    color: #ffffff;
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
-  
-  /* Cambiar fondo de error */
-  .Toastify__toast--error {
-    background-color: #ef4444 !important; /* Rojo elegante */
-    color: #ffffff;
-  }
-  
-  /* Personaliza la animación */
-  .Toastify__slide-enter {
-    animation: slideIn 0.4s ease forwards;
-  }
-  
-  @keyframes slideIn {
-    from {
-      transform: translateY(-50px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }  
+}

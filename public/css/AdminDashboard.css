@@ -15,6 +15,60 @@
     top: 0;
     z-index: 1000;
   }
+
+  .admin-body {
+    display: flex;
+  }
+
+  /* Sidebar */
+.admin-sidebar {
+  width: 220px;
+  background-color: #111827; /* azul oscuro elegante */
+  color: white;
+  min-height: 100vh;
+  padding-top: 6rem; /* Espacio por el navbar */
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Efecto hover para los links del sidebar */
+.sidebar-link {
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  border-radius: 8px;
+  color: #f9fafb;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 1rem;
+}
+
+/* Cuando está activo */
+.sidebar-link.active-link {
+  background-color: #1f2937; /* Fondo más fuerte */
+  color: #10b981;
+  font-weight: bold;
+}
+
+
+.sidebar-link:hover {
+  background-color: #374151; /* Gris más oscuro al pasar mouse */
+  color: #10b981; /* Verde elegante */
+}
+
+/* Contenido principal */
+.admin-container {
+  margin-left: 220px; /* Dejar espacio para el sidebar */
+  padding: 2rem;
+  flex: 1;
+}
   
   .nav-left .nav-item {
     margin-right: 1.5rem;

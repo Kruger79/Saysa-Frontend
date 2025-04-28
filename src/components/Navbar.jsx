@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { FaUserCircle, FaShoppingCart } from "react-icons/fa";
 import logo from "../../public/logo-saysa.png";
-import '../../public/css/Navbar.css'
+import "../../public/css/Navbar.css";
 
 export default function Navbar({ transparente }) {
   const location = useLocation();
@@ -22,7 +22,6 @@ export default function Navbar({ transparente }) {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top w-100 shadow-sm">
       <div className="container-fluid px-4 d-flex justify-content-between align-items-center">
-        
         {/* IZQUIERDA */}
         <div className="d-flex align-items-center gap-4">
           <Link className="navbar-brand d-flex align-items-center gap-2" to="/">
@@ -33,26 +32,32 @@ export default function Navbar({ transparente }) {
             {rol === "admin" && (
               <Link
                 to="/admin"
-                className={`nav-link ${isActive("/admin") ? "active text-info" : "text-white"}`}
+                className={`nav-link ${
+                  isActive("/admin") ? "active text-info" : "text-white"
+                }`}
               >
                 Dashboard
               </Link>
             )}
             <Link
               to="/pedidos"
-              className={`nav-link ${isActive("/pedidos") ? "active text-info" : "text-white"}`}
+              className={`nav-link ${
+                isActive("/pedidos") ? "active text-info" : "text-white"
+              }`}
             >
               Pedidos
             </Link>
             <Link
               to="/Products"
-              className={`nav-link ${isActive("/Products") ? "active text-info" : "text-white"}`}
+              className={`nav-link ${
+                isActive("/Products") ? "active text-info" : "text-white"
+              }`}
             >
               Catálogo
             </Link>
           </div>
         </div>
-  
+
         {/* DERECHA - Íconos */}
         <div className="d-flex align-items-center gap-3 position-relative">
           {/* Ícono de carrito */}
@@ -62,7 +67,7 @@ export default function Navbar({ transparente }) {
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/carrito")} // Ajusta tu ruta aquí
           />
-  
+
           {/* Ícono de usuario */}
           <div className="position-relative">
             <FaUserCircle
@@ -104,8 +109,7 @@ export default function Navbar({ transparente }) {
             )}
           </div>
         </div>
-  
       </div>
     </nav>
-  );  
+  );
 }

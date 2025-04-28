@@ -17,7 +17,7 @@ export default function Login() {
     e.preventDefault();
 
     if (!correoOCedula || !contrasena) {
-      toast.error('Por favor completa todos los campos');
+      toast.error("Por favor completa todos los campos");
       return;
     }
 
@@ -27,7 +27,7 @@ export default function Login() {
       console.log("🔐 Usuario logueado:", data);
       localStorage.setItem("usuario", JSON.stringify(data));
 
-      toast.success('Inicio de sesión exitoso');
+      toast.success("Inicio de sesión exitoso");
 
       // Redirigir según el rol
       setTimeout(() => {
@@ -39,7 +39,8 @@ export default function Login() {
         setLoading(false);
       }, 1200); // 1.5 segundos
     } catch (err) {
-      const mensaje = err.response?.data?.error || "Correo o contraseña incorrectos";
+      const mensaje =
+        err.response?.data?.error || "Correo o contraseña incorrectos";
       toast.error(mensaje);
       setLoading(false);
     }
