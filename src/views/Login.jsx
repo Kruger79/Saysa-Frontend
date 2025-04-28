@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 export default function Login() {
   const [correoOCedula, setCorreoOCedula] = useState("");
   const [contrasena, setContrasena] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -21,6 +22,7 @@ export default function Login() {
     }
 
     try {
+      setLoading(true);
       const data = await loginUsuario(correoOCedula, contrasena);
       console.log("🔐 Usuario logueado:", data);
       localStorage.setItem("usuario", JSON.stringify(data));
@@ -28,14 +30,18 @@ export default function Login() {
       toast.success('Inicio de sesión exitoso');
 
       // Redirigir según el rol
-      if (data.Rol === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/");
-      }
+      setTimeout(() => {
+        if (data.Rol === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
+        setLoading(false);
+      }, 1200); // 1.5 segundos
     } catch (err) {
       const mensaje = err.response?.data?.error || "Correo o contraseña incorrectos";
       toast.error(mensaje);
+      setLoading(false);
     }
   };
 
@@ -65,9 +71,14 @@ export default function Login() {
             onChange={(e) => setContrasena(e.target.value)}
             required
           />
-          <button type="submit" className="login-button">
-            Iniciar Sesión
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? (
+              <div className="spinner"></div>
+            ) : (
+              "Iniciar Sesión"
+            )}
           </button>
+
           {error && <p className="login-error">{error}</p>}
         </form>
 
