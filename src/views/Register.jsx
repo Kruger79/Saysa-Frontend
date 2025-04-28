@@ -108,12 +108,12 @@ export default function Register() {
             onChange={handleChange}
             required
           />
-          <button type="submit" className="login-button" disabled={loading}>
-            {loading ? (
-              <div className="spinner"></div>
-            ) : (
-              "Registrarse"
-            )}
+          <button
+            type="submit"
+            className={`login-button ${loading ? "disabled-button" : ""}`}
+            disabled={loading}
+          >
+            {loading ? <div className="spinner"></div> : "Registrarse"}
           </button>
 
           {error && <p style={{ color: "red" }}>{error}</p>}

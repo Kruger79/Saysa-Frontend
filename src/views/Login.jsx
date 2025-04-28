@@ -71,14 +71,13 @@ export default function Login() {
             onChange={(e) => setContrasena(e.target.value)}
             required
           />
-          <button type="submit" className="login-button" disabled={loading}>
-            {loading ? (
-              <div className="spinner"></div>
-            ) : (
-              "Iniciar Sesión"
-            )}
+          <button
+            type="submit"
+            className={`login-button ${loading ? "disabled-button" : ""}`}
+            disabled={loading}
+          >
+            {loading ? <div className="spinner"></div> : "Iniciar Sesión"}
           </button>
-
           {error && <p className="login-error">{error}</p>}
         </form>
 
