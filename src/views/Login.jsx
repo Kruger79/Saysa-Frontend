@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { loginUsuario } from "../api/usuarios";
 import "../../public/css/Login.css";
 import logo from "../../public/logo-saysa.png";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 export default function Login() {
@@ -13,10 +14,18 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!correoOCedula || !contrasena) {
+      toast.error('Por favor completa todos los campos');
+      return;
+    }
+
     try {
       const data = await loginUsuario(correoOCedula, contrasena);
       console.log("🔐 Usuario logueado:", data);
       localStorage.setItem("usuario", JSON.stringify(data));
+
+      toast.success('Inicio de sesión exitoso');
 
       // Redirigir según el rol
       if (data.Rol === "admin") {
@@ -25,8 +34,8 @@ export default function Login() {
         navigate("/");
       }
     } catch (err) {
-      console.error("❌ Error al iniciar sesión:", err);
-      setError("Correo o contraseña incorrectos");
+      const mensaje = err.response?.data?.error || "Correo o contraseña incorrectos";
+      toast.error(mensaje);
     }
   };
 
