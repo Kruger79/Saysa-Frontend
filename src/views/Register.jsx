@@ -7,7 +7,8 @@ import logo from "../../public/logo-saysa.png";
 
 export default function Register() {
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
+  
   // Estado para los datos
   const [formData, setFormData] = useState({
     nombre: "",
@@ -31,6 +32,7 @@ export default function Register() {
     e.preventDefault();
 
     try {
+      setLoading(true);
       await registrarUsuario(formData);
       toast.success("✅ ¡Usuario registrado exitosamente!");
       setFormData({
@@ -41,13 +43,15 @@ export default function Register() {
         contrasena: "",
       });
 
-      // Redirige al login después de 2 segundos
+      // Redirige al login después de 1.5 segundos
       setTimeout(() => {
         navigate("/login");
-      }, 2000);
+        setLoading(false);
+      }, 1200); // 1.5 segundos
     } catch (error) {
       const mensaje = error.response?.data?.error || 'Error al registrar usuario';
       toast.error(mensaje);
+      setLoading(false);
     }
   };
 
@@ -104,8 +108,12 @@ export default function Register() {
             onChange={handleChange}
             required
           />
-          <button type="submit" className="register-button">
-            Registrarse
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? (
+              <div className="spinner"></div>
+            ) : (
+              "Registrarse"
+            )}
           </button>
 
           {error && <p style={{ color: "red" }}>{error}</p>}
