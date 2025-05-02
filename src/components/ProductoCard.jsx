@@ -1,11 +1,12 @@
 import "../../public/css/ProductoCard.css";
+import { toast } from "react-toastify";
 
 export default function ProductoCard({ producto, reverse }) {
   const agregarAlCarrito = () => {
     const carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
     carritoActual.push(producto);
     localStorage.setItem("carrito", JSON.stringify(carritoActual));
-    alert("Producto agregado al carrito");
+    toast.success("Producto agregado al carrito");
   };
 
   return (
@@ -18,12 +19,12 @@ export default function ProductoCard({ producto, reverse }) {
 
       {/* Información del producto */}
       <div className="producto-card-info">
-        <h2>{producto.Nombre}</h2>
-        <p>{producto.Descripcion}</p>
-        <p><strong>Precio:</strong> ${producto.Precio}</p>
+        <h3 className="producto-nombre">{producto.Nombre}</h3>
+        <p className="producto-card-desc">{producto.Descripcion}</p>
+        <p className="producto-precio">Precio: ${producto.Precio}</p>
 
         {/* Botón para agregar al carrito */}
-        <button className="btn-agregar" onClick={agregarAlCarrito}>
+        <button className="producto-boton" onClick={agregarAlCarrito}>
           Agregar al carrito
         </button>
       </div>

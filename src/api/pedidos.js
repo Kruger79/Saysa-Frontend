@@ -1,13 +1,16 @@
-import axios from "axios";
+// Esta función usa el mismo backend de cotizaciones
+export async function crearCotizacion(datos) {
+  const response = await fetch("http://localhost:3000/api/v1/cotizaciones", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datos),
+  });
 
-const API_URL = "http://localhost:3001/api/v1"; // Cambia si tu backend tiene otro puerto
-
-export async function crearPedido(pedidoData) {
-  try {
-    const response = await axios.post(`${API_URL}/pedidos`, pedidoData);
-    return response.data;
-  } catch (error) {
-    console.error("Error al crear el pedido:", error);
-    throw error;
+  if (!response.ok) {
+    const text = await response.text();
+    console.error("Error al guardar cotización:", text);
+    throw new Error("Error al guardar cotización");
   }
+
+  return await response.json();
 }

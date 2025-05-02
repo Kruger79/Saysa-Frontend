@@ -30,16 +30,20 @@ export default function Productos() {
         </div>
       </div>
 
-      {/* Contenedor de productos */}
-      <div className="productos-container">
-        {productos.map((producto, index) => (
-          <ProductoCard
-            key={producto.IdProducto}
-            producto={producto}
-            reverse={index % 2 !== 0}
-          />
-        ))}
-      </div>
+{/* Contenedor de productos */}
+<div className="productos-container">
+  {productos.length > 0 ? (
+    productos.map((producto, index) => (
+      <ProductoCard
+        key={producto.IdProducto}
+        producto={producto}
+        reverse={index % 2 !== 0}
+      />
+    ))
+  ) : (
+    <p className="text-center">No hay productos disponibles.</p>
+  )}
+</div>
     </div>
   );
 }

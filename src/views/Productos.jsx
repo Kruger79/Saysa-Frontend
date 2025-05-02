@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
-import { crearPedido } from "../api/pedidos"; // Este lo creamos antes
+import { toast } from "react-toastify";
 
 export default function Carrito() {
   const [carrito, setCarrito] = useState([]);
@@ -17,13 +17,13 @@ export default function Carrito() {
 
   const confirmarPedido = async () => {
     if (carrito.length === 0) {
-      alert("El carrito está vacío.");
+      toast.info("El carrito está vacío.")
       return;
     }
 
     const usuario = JSON.parse(localStorage.getItem("usuario"));
     if (!usuario) {
-      alert("Debe iniciar sesión para confirmar el pedido.");
+      toast.info("Debe iniciar sesión para confirmar el pedido.")
       return;
     }
 
@@ -37,10 +37,10 @@ export default function Carrito() {
 
     try {
       await crearPedido(pedidoData);
-      alert("¡Pedido enviado con éxito!");
+      toast.success("Pedido enviado con exito!");
       vaciarCarrito();
     } catch (error) {
-      alert("Error al enviar el pedido. Intente nuevamente.");
+      toast.error("Error al enviar el pedido. Intente nuevamente.");
     }
   };
 

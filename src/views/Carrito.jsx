@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
-import { crearPedido } from "../api/pedidos";
+import { toast } from "react-toastify";
 
 export default function Carrito() {
   const [carrito, setCarrito] = useState([]);
@@ -17,30 +17,49 @@ export default function Carrito() {
 
   const confirmarPedido = async () => {
     if (carrito.length === 0) {
-      alert("El carrito está vacío.");
+      toast.warning("El carrito está vacío.");
       return;
     }
 
     const usuario = JSON.parse(localStorage.getItem("usuario"));
     if (!usuario) {
-      alert("Debe iniciar sesión para confirmar el pedido.");
+      toast.warning("Debe iniciar sesión para confirmar el pedido.");
       return;
     }
 
-    const pedidoData = {
+    // Armamos el mensaje para WhatsApp
+    const mensajeProductos = carrito
+      .map((item, index) => `🔹 ${item.Nombre} - $${item.Precio}`)
+      .join("%0A");
+    const mensajeFinal = `¡Hola!%0AQuiero realizar un pedido con los siguientes productos:%0A${mensajeProductos}`;
+    const numeroWhatsapp = "50689864016";
+
+    // Creamos cotización en el backend
+    const cotizacion = {
       cedula: usuario.Cedula,
-      productos: carrito.map((item) => ({
-        idProducto: item.IdProducto,
+      productos: carrito.map((p) => ({
+        idProducto: p.IdProducto,
         cantidad: 1,
       })),
     };
 
     try {
-      await crearPedido(pedidoData);
-      alert("¡Pedido enviado con éxito!");
+      await fetch("http://localhost:3000/api/v1/cotizaciones", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cotizacion),
+      });
+
+      toast.success("¡Cotización enviada y guardada con éxito!");
       vaciarCarrito();
+
+      // Abrir WhatsApp
+      window.open(`https://wa.me/${numeroWhatsapp}?text=${mensajeFinal}`, "_blank");
     } catch (error) {
-      alert("Error al enviar el pedido. Intente nuevamente.");
+      console.error("Error al guardar la cotización:", error);
+      toast.error("Hubo un error al guardar la cotización.");
     }
   };
 
@@ -81,10 +100,10 @@ export default function Carrito() {
 
             <div className="d-flex justify-content-center gap-3 mt-4">
               <button onClick={vaciarCarrito} className="btn btn-danger">
-                Vaciar carrito 
+                Vaciar carrito
               </button>
               <button onClick={confirmarPedido} className="btn btn-success">
-                Confirmar Pedido
+                Confirmar pedido
               </button>
             </div>
           </>
