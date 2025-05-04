@@ -1,0 +1,39 @@
+
+/* src/public/css/Carrito.css */
+.carrito-container {
+  padding-top: 4rem;
+  padding-bottom: 2rem;
+}
+
+.carrito-table th,
+.carrito-table td {
+  vertical-align: middle;
+}
+
+.carrito-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.carrito-actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.carrito-empty {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.img-carrito {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
