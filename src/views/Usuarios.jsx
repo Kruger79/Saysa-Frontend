@@ -56,9 +56,6 @@ export default function Usuarios() {
       <div className="usuarios-container">
         <div className="usuarios-header">
           <h1>Usuarios Registrados</h1>
-          <button className="usuarios-button">
-            <FaUserPlus /> Agregar Usuario
-          </button>
         </div>
 
         <table className="usuarios-table">
