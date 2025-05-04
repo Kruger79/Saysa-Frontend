@@ -1,0 +1,97 @@
+.admin-productos-page {
+    display: flex;
+    background-color: #f4f7f9;
+    min-height: 100vh;
+    font-family: "Segoe UI", sans-serif;
+  }
+  
+  .admin-productos-container {
+    flex-grow: 1;
+    padding: 2rem 3rem;
+    margin-left: 250px;
+  }
+  
+  .admin-productos-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.5rem;
+  }
+  
+  .admin-productos-header h2 {
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: #1e1e1e;
+    margin: 0;
+  }
+  
+  .admin-productos-header .btn-success {
+    background-color: #148f52;
+    border-color: #148f52;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+  }
+  
+  .admin-productos-header .btn-success:hover {
+    background-color: #107c45;
+    border-color: #107c45;
+  }
+  
+  .admin-productos-table {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+  }
+  
+  .admin-productos-table th {
+    background-color: #f1f4f6;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    text-align: left;
+    padding: 0.8rem;
+  }
+  
+  .admin-productos-table td {
+    vertical-align: middle;
+    padding: 0.7rem;
+  }
+  
+  .admin-productos-table img {
+    width: 70px;
+    height: auto;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+  
+  .admin-productos-table .btn {
+    border-radius: 6px;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+  }
+  
+  .admin-productos-table .btn-primary {
+    background-color: #246bfd;
+    border-color: #246bfd;
+  }
+  
+  .admin-productos-table .btn-primary:hover {
+    background-color: #1751c2;
+    border-color: #1751c2;
+  }
+  
+  .admin-productos-table .btn-danger {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+  }
+  
+  .admin-productos-table .btn-danger:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
+  }
+  

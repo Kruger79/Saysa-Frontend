@@ -8,6 +8,7 @@ import AdminDashboard from "../views/AdminDashboard";
 import Usuarios from "../views/Usuarios";
 import Carrito from "../views/Carrito";
 import Cotizaciones from "../views/Cotizaciones";
+import AdminProductoCRUD from "../views/AdminProductoCRUD";
 
 export default function AppRouter() {
   return (
@@ -22,7 +23,7 @@ export default function AppRouter() {
         <Route path="/admin/usuarios" element={<Usuarios />} />
         <Route path="/carrito" element={<Carrito />} />
         <Route path="/pedidos" element={<Cotizaciones />} />
-
+        <Route path="/admin/productos" element={<AdminProductoCRUD />} />
       </Routes>
     </BrowserRouter>
   );
