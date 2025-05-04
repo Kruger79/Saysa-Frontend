@@ -15,3 +15,10 @@
   transform: scale(1.2);
   /* Pequeño zoom del 20% */
 }
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+}

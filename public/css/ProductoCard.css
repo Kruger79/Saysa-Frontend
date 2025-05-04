@@ -1,9 +1,9 @@
 .producto-card {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 30px 0;
-  flex-wrap: wrap;
+  padding: 1rem;
+  border-radius: 12px;
+  gap: 2rem;
 }
 
 .producto-card.reverse {
@@ -13,42 +13,35 @@
 .producto-card-img img {
   width: 280px;
   height: 280px;
-  object-fit: cover;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 .producto-card-info {
-  background-color: #1d1d1d; /* Fondo oscuro */
-  color: #ffffff; /* Texto principal blanco */
-  padding: 20px;
-  border-radius: 12px;
-  margin: 20px;
-  max-width: 380px;
-  text-align: left;
-  font-family: 'Poppins', sans-serif;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  flex: 1;
 }
 
 /* Título */
 .producto-card-info h2 {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
 }
 
 /* Descripción */
 .producto-card-info p {
-  color: #cccccc; /* Gris claro para descripción */
-  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 0.8rem;
 }
 
 /* Precio */
-.producto-card-info p strong,
 .producto-card-info .precio {
-  color: #4CAF50; /* Verde bonito para precio */
-  font-size: 18px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #10b981; /* Verde */
+  margin-bottom: 1rem;
 }
 
 /* Botón Agregar */
