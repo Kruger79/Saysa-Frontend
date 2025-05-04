@@ -1,45 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../public/css/AdminDashboard.css";
-import { FaSearch, FaTachometerAlt, FaUsers, FaBoxOpen } from "react-icons/fa"; // ← íconos
+import { FaSearch, FaTachometerAlt, FaUsers, FaBoxOpen } from "react-icons/fa";
 import NavbarAdmin from "../components/Navbar";
 import { useLocation, Link } from "react-router-dom";
 
 export default function AdminDashboard() {
   const location = useLocation();
-  const pedidosRecientes = [
-    {
-      id: "1001",
-      fecha: "24/04/2024",
-      cliente: "Finca Los Pinos",
-      estado: "Pendiente",
-    },
-    {
-      id: "1990",
-      fecha: "22/04/2024",
-      cliente: "Finca El Valle",
-      estado: "Completo",
-    },
-    {
-      id: "0999",
-      fecha: "20/04/2024",
-      cliente: "Finca La Esperanza",
-      estado: "Pendiente",
-    },
-    {
-      id: "0998",
-      fecha: "18/04/2024",
-      cliente: "Finca Los Pinos",
-      estado: "Completo",
-    },
-    {
-      id: "0997",
-      fecha: "17/04/2024",
-      cliente: "Finca Santa Marta",
-      estado: "Pendiente",
-    },
-  ];
+  const [pedidos, setPedidos] = useState([]);
+
+  useEffect(() => {
+    async function fetchPedidos() {
+      try {
+        const response = await fetch("http://localhost:3000/api/v1/pedidos");
+        const data = await response.json();
+        setPedidos(data);
+      } catch (error) {
+        console.error("Error al obtener pedidos:", error);
+      }
+    }
+
+    fetchPedidos();
+  }, []);
 
   const isActive = (path) => location.pathname === path;
+
+  const formatearFecha = (fecha) => {
+    const f = new Date(fecha);
+    return isNaN(f)
+      ? "Fecha inválida"
+      : `${f.getDate().toString().padStart(2, "0")}/${(f.getMonth() + 1)
+          .toString()
+          .padStart(2, "0")}/${f.getFullYear()}`;
+  };
 
   return (
     <div className="admin-dashboard">
@@ -52,9 +44,7 @@ export default function AdminDashboard() {
             <li>
               <Link
                 to="/admin"
-                className={`sidebar-link ${
-                  isActive("/admin") ? "active-link" : ""
-                }`}
+                className={`sidebar-link ${isActive("/admin") ? "active-link" : ""}`}
               >
                 <FaTachometerAlt /> Dashboard
               </Link>
@@ -62,9 +52,7 @@ export default function AdminDashboard() {
             <li>
               <Link
                 to="/admin/usuarios"
-                className={`sidebar-link ${
-                  isActive("/admin/usuarios") ? "active-link" : ""
-                }`}
+                className={`sidebar-link ${isActive("/admin/usuarios") ? "active-link" : ""}`}
               >
                 <FaUsers /> Usuarios
               </Link>
@@ -72,9 +60,7 @@ export default function AdminDashboard() {
             <li>
               <Link
                 to="/admin/productos"
-                className={`sidebar-link ${
-                  isActive("/admin/productos") ? "active-link" : ""
-                }`}
+                className={`sidebar-link ${isActive("/admin/productos") ? "active-link" : ""}`}
               >
                 <FaBoxOpen /> Productos
               </Link>
@@ -89,7 +75,7 @@ export default function AdminDashboard() {
           <div className="admin-stats">
             <div className="stat-card">
               <h3>Pedidos pendientes</h3>
-              <p className="stat-number">5</p>
+              <p className="stat-number">{pedidos.length}</p>
             </div>
             <div className="stat-card">
               <h3>Cotizaciones del mes</h3>
@@ -104,19 +90,19 @@ export default function AdminDashboard() {
                 <th>Pedido</th>
                 <th>Fecha</th>
                 <th>Cliente</th>
+                <th>Cédula</th>
                 <th>Estado</th>
               </tr>
             </thead>
             <tbody>
-              {pedidosRecientes.map((pedido) => (
-                <tr key={pedido.id}>
-                  <td>{pedido.id}</td>
-                  <td>{pedido.fecha}</td>
-                  <td>{pedido.cliente}</td>
+              {pedidos.map((pedido) => (
+                <tr key={pedido.IdPedido}>
+                  <td>{pedido.IdPedido}</td>
+                  <td>{formatearFecha(pedido.FechaPedido)}</td>
+                  <td>{pedido.NombreCliente}</td>
+                  <td>{pedido.Cedula}</td>
                   <td>
-                    <span className={`badge ${pedido.estado.toLowerCase()}`}>
-                      {pedido.estado}
-                    </span>
+                    <span className="badge badge-success">Confirmado</span>
                   </td>
                 </tr>
               ))}
