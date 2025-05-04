@@ -4,6 +4,9 @@ import { toast } from "react-toastify";
 
 export default function Carrito() {
   const [carrito, setCarrito] = useState([]);
+  const [nombreFinca, setNombreFinca] = useState("");
+  const [tiempoEntrega, setTiempoEntrega] = useState("5 días");
+
 
   useEffect(() => {
     const carritoGuardado = JSON.parse(localStorage.getItem("carrito")) || [];
@@ -15,51 +18,58 @@ export default function Carrito() {
     setCarrito([]);
   };
 
+  const calcularTotal = () => {
+    return carrito.reduce(
+      (total, item) => total + item.Precio * item.cantidad,
+      0
+    );
+  };
+
   const confirmarPedido = async () => {
     if (carrito.length === 0) {
       toast.warning("El carrito está vacío.");
       return;
     }
-
+  
     const usuario = JSON.parse(localStorage.getItem("usuario"));
     if (!usuario) {
       toast.warning("Debe iniciar sesión para confirmar el pedido.");
       return;
     }
-
-    // Armamos el mensaje para WhatsApp
-    const mensajeProductos = carrito
-      .map((item, index) => `🔹 ${item.Nombre} - $${item.Precio}`)
-      .join("%0A");
-    const mensajeFinal = `¡Hola!%0AQuiero realizar un pedido con los siguientes productos:%0A${mensajeProductos}`;
-    const numeroWhatsapp = "50689864016";
-
-    // Creamos cotización en el backend
-    const cotizacion = {
-      cedula: usuario.Cedula,
-      productos: carrito.map((p) => ({
-        idProducto: p.IdProducto,
-        cantidad: 1,
-      })),
-    };
-
+  
+    const productos = carrito.map((item) => ({
+      idProducto: item.IdProducto,
+      cantidad: item.cantidad,
+      precioUnitario: item.Precio,
+    }));
+  
     try {
       await fetch("http://localhost:3000/api/v1/cotizaciones", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(cotizacion),
+        body: JSON.stringify({
+          cedula: usuario.Cedula,
+          productos,
+          nombreFinca,
+          tiempoEntrega,
+        }),
       });
-
+  
       toast.success("¡Cotización enviada y guardada con éxito!");
       vaciarCarrito();
-
-      // Abrir WhatsApp
-      window.open(`https://wa.me/${numeroWhatsapp}?text=${mensajeFinal}`, "_blank");
+  
+      // ✅ Mensaje con nombres
+      const mensaje = carrito
+        .map((item) => `🔹 ${item.cantidad} x ${item.Nombre}`)
+        .join("%0A");
+  
+      const numero = "50689864016";
+      window.open(`https://wa.me/${numero}?text=Hola!, quisiera realizar un pedido con los siguientes productos:%0A${mensaje}`, "_blank");
     } catch (error) {
-      console.error("Error al guardar la cotización:", error);
-      toast.error("Hubo un error al guardar la cotización.");
+      console.error("Error al enviar:", error);
+      toast.error("Error al guardar el pedido.");
     }
   };
 
@@ -79,6 +89,8 @@ export default function Carrito() {
                   <th>Imagen</th>
                   <th>Producto</th>
                   <th>Precio</th>
+                  <th>Cantidad</th>
+                  <th>Subtotal</th>
                 </tr>
               </thead>
               <tbody>
@@ -88,15 +100,53 @@ export default function Carrito() {
                       <img
                         src={item.ImagenUrl}
                         alt={item.Nombre}
-                        style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                        style={{
+                          width: "80px",
+                          height: "80px",
+                          objectFit: "cover",
+                        }}
                       />
                     </td>
                     <td>{item.Nombre}</td>
-                    <td>${item.Precio}</td>
+                    <td>₡{item.Precio}</td>
+                    <td>{item.cantidad}</td>
+                    <td>₡{item.Precio * item.cantidad}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
+
+            <div className="mb-4">
+              <label htmlFor="finca" className="form-label">
+                Nombre de la finca (opcional):
+              </label>
+              <input
+                type="text"
+                id="finca"
+                className="form-control"
+                value={nombreFinca}
+                onChange={(e) => setNombreFinca(e.target.value)}
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="tiempoEntrega" className="form-label">
+                Tiempo estimado de entrega:
+              </label>
+              <select
+                id="tiempoEntrega"
+                className="form-select"
+                value={tiempoEntrega}
+                onChange={(e) => setTiempoEntrega(e.target.value)}
+              >
+                <option value="5 días">5 días</option>
+                <option value="1 semana">1 semana</option>
+                <option value="2 semanas">2 semanas</option>
+                <option value="3 semanas">3 semanas</option>
+              </select>
+            </div>
+
+            <h4 className="text-end mt-4">Total: ₡{calcularTotal()}</h4>
 
             <div className="d-flex justify-content-center gap-3 mt-4">
               <button onClick={vaciarCarrito} className="btn btn-danger">

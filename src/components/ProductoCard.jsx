@@ -2,8 +2,21 @@ import "../../public/css/ProductoCard.css";
 import { toast } from "react-toastify";
 export default function ProductoCard({ producto, reverse }) {
   const agregarAlCarrito = () => {
-    const carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
-    carritoActual.push(producto);
+    let carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
+
+    // Verificar si el producto ya está en el carrito
+    const indexExistente = carritoActual.findIndex(
+      (item) => item.IdProducto === producto.IdProducto
+    );
+
+    if (indexExistente !== -1) {
+      // Si ya está, incrementamos la cantidad
+      carritoActual[indexExistente].cantidad += 1;
+    } else {
+      // Si no está, lo agregamos con cantidad 1
+      carritoActual.push({ ...producto, cantidad: 1 });
+    }
+
     localStorage.setItem("carrito", JSON.stringify(carritoActual));
     toast.success("Producto agregado al carrito");
   };
