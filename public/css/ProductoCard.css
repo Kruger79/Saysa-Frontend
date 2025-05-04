@@ -2,54 +2,71 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  gap: 2rem;
+  margin: 30px 0;
   flex-wrap: wrap;
 }
 
-.producto-imagen img {
-  width: 200px;
-  height: 200px;
-  object-fit: contain;
-  border-radius: 8px;
+.producto-card.reverse {
+  flex-direction: row-reverse;
 }
 
-.producto-info {
-  flex: 1;
+.producto-card-img img {
+  width: 280px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-.producto-nombre {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #ffffff;
+.producto-card-info {
+  background-color: #1d1d1d; /* Fondo oscuro */
+  color: #ffffff; /* Texto principal blanco */
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px;
+  max-width: 380px;
+  text-align: left;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.producto-desc {
-  font-size: 0.9rem;
-  color: #6b7280;
-  margin-bottom: 0.8rem;
-}
-
-.producto-precio {
-  font-size: 1rem;
+/* Título */
+.producto-card-info h2 {
+  font-size: 22px;
   font-weight: bold;
-  color: #10b981;
-  /* Verde */
-  margin-bottom: 1rem;
+  margin-bottom: 10px;
 }
 
-.producto-boton {
-  background: #10b981;
-  color: white;
+/* Descripción */
+.producto-card-info p {
+  color: #cccccc; /* Gris claro para descripción */
+  margin-bottom: 8px;
+}
+
+/* Precio */
+.producto-card-info p strong,
+.producto-card-info .precio {
+  color: #4CAF50; /* Verde bonito para precio */
+  font-size: 18px;
+}
+
+/* Botón Agregar */
+.btn-agregar {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 8px 16px;
+  background-color: #1dc241; /* Azul oscuro casi negro */
+  color: #ffffff;
+  font-weight: bold;
   border: none;
-  padding: 0.6rem 1.2rem;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 0.95rem;
-  transition: background 0.3s;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
 }
 
-.producto-boton:hover {
-  background: #000;
+/* Hover botón */
+.btn-agregar:hover {
+  background-color: #1f2937; /* Un poco más claro al pasar */
 }
