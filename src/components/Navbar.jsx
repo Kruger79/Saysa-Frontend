@@ -3,6 +3,8 @@ import { useLocation, Link, useNavigate } from "react-router-dom";
 import { FaUserCircle, FaShoppingCart } from "react-icons/fa";
 import logo from "../../public/logo-saysa.png";
 import "../../public/css/Navbar.css";
+import { CartContext } from "../context/CartContext";
+
 
 export default function Navbar({ transparente }) {
   const location = useLocation();
