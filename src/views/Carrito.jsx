@@ -86,7 +86,7 @@ export default function Carrito() {
                   <tr key={index}>
                     <td>
                       <img
-                        src={item.ImagenUrl}
+                        src={item.Imagen}
                         alt={item.Nombre}
                         style={{ width: "80px", height: "80px", objectFit: "cover" }}
                       />
