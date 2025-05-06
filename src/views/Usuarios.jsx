@@ -8,7 +8,7 @@ import SidebarAdmin from "../components/SidebarAdmin";
 
 export default function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
-  const [editandoId, setEditandoId] = useState(null);
+  const [editandoPedidoId, seteditandoPedidoId] = useState(null);
 
   useEffect(() => {
     async function cargarUsuarios() {
@@ -41,7 +41,7 @@ export default function Usuarios() {
           : usuario
       );
       setUsuarios(nuevosUsuarios);
-      setEditandoId(null);
+      seteditandoPedidoId(null);
       toast.success("Rol actualizado exitosamente ✅");
     } catch (error) {
       console.error("Error al actualizar rol:", error);
@@ -77,7 +77,7 @@ export default function Usuarios() {
                 <td>{usuario.Cedula}</td>
                 <td>{usuario.Telefono}</td>
                 <td>
-                  {editandoId === usuario.IdUsuario ? (
+                  {editandoPedidoId === usuario.IdUsuario ? (
                     <select
                       value={usuario.Rol}
                       onChange={(e) =>
@@ -95,10 +95,10 @@ export default function Usuarios() {
                   )}
                 </td>
                 <td>
-                  {editandoId !== usuario.IdUsuario && (
+                  {editandoPedidoId !== usuario.IdUsuario && (
                     <button
                       className="editar-boton"
-                      onClick={() => setEditandoId(usuario.IdUsuario)}
+                      onClick={() => seteditandoPedidoId(usuario.IdUsuario)}
                     >
                       <FaEdit /> Editar Rol
                     </button>

@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "../../public/css/AdminDashboard.css";
-import { FaSearch, FaTachometerAlt, FaUsers, FaBoxOpen } from "react-icons/fa";
+import {
+  FaSearch,
+  FaTachometerAlt,
+  FaUsers,
+  FaBoxOpen,
+  FaEdit,
+  FaCheck,
+} from "react-icons/fa";
 import NavbarAdmin from "../components/Navbar";
 import { useLocation, Link } from "react-router-dom";
 
 export default function AdminDashboard() {
   const location = useLocation();
   const [pedidos, setPedidos] = useState([]);
+  const [editandoPedidoId, setEditandoPedidoId] = useState(null);
+  const [estadosTemporales, setEstadosTemporales] = useState({});
 
   useEffect(() => {
     async function fetchPedidos() {
@@ -21,6 +30,26 @@ export default function AdminDashboard() {
 
     fetchPedidos();
   }, []);
+
+  const actualizarEstadoCotizacion = async (idCotizacion, nuevoEstado) => {
+    try {
+      await fetch(`http://localhost:3000/api/v1/cotizaciones/${idCotizacion}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ estado: nuevoEstado }),
+      });
+
+      setPedidos((prev) =>
+        prev.map((p) =>
+          p.IdCotizacion === idCotizacion
+            ? { ...p, Estado: nuevoEstado }
+            : p
+        )
+      );
+    } catch (error) {
+      console.error("Error al actualizar estado:", error);
+    }
+  };
 
   const isActive = (path) => location.pathname === path;
 
@@ -38,7 +67,6 @@ export default function AdminDashboard() {
       <NavbarAdmin />
 
       <div className="admin-body">
-        {/* Sidebar */}
         <aside className="admin-sidebar">
           <ul className="sidebar-menu">
             <li>
@@ -68,7 +96,6 @@ export default function AdminDashboard() {
           </ul>
         </aside>
 
-        {/* Contenido principal */}
         <main className="admin-container">
           <h1 className="admin-title">Vista de administrador</h1>
 
@@ -92,6 +119,7 @@ export default function AdminDashboard() {
                 <th>Cliente</th>
                 <th>Cédula</th>
                 <th>Estado</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -101,8 +129,79 @@ export default function AdminDashboard() {
                   <td>{formatearFecha(pedido.FechaPedido)}</td>
                   <td>{pedido.NombreCliente}</td>
                   <td>{pedido.Cedula}</td>
+
+                  {/* ✅ Estado */}
                   <td>
-                    <span className="badge badge-success">Confirmado</span>
+                    {pedido.IdCotizacion ? (
+                      editandoPedidoId === pedido.IdPedido ? (
+                        <select
+                          value={
+                            estadosTemporales[pedido.IdPedido] ||
+                            pedido.Estado ||
+                            "Pendiente"
+                          }
+                          onChange={(e) =>
+                            setEstadosTemporales((prev) => ({
+                              ...prev,
+                              [pedido.IdPedido]: e.target.value,
+                            }))
+                          }
+                          className="rol-select"
+                        >
+                          <option value="Pendiente">Pendiente</option>
+                          <option value="Enviada">Enviada</option>
+                          <option value="Aceptada">Aceptada</option>
+                          <option value="Rechazada">Rechazada</option>
+                        </select>
+                      ) : (
+                        <span
+                          className={`rol-badge ${
+                            pedido.Estado?.toLowerCase() || "pendiente"
+                          }`}
+                        >
+                          {pedido.Estado || "Pendiente"}
+                        </span>
+                      )
+                    ) : (
+                      <span className="rol-badge sin-estado">Sin estado</span>
+                    )}
+                  </td>
+
+                  {/* ✅ Acciones */}
+                  <td>
+                    {pedido.IdCotizacion ? (
+                      editandoPedidoId === pedido.IdPedido ? (
+                        <button
+                          className="btn btn-success"
+                          onClick={async () => {
+                            const nuevoEstado =
+                              estadosTemporales[pedido.IdPedido] || pedido.Estado;
+                            await actualizarEstadoCotizacion(
+                              pedido.IdCotizacion,
+                              nuevoEstado
+                            );
+                            setEditandoPedidoId(null);
+                          }}
+                        >
+                          <FaCheck />
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => {
+                            setEditandoPedidoId(pedido.IdPedido);
+                            setEstadosTemporales((prev) => ({
+                              ...prev,
+                              [pedido.IdPedido]: pedido.Estado || "Pendiente",
+                            }));
+                          }}
+                        >
+                          <FaEdit />
+                        </button>
+                      )
+                    ) : (
+                      <span className="text-muted">—</span>
+                    )}
                   </td>
                 </tr>
               ))}
