@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { obtenerPrecioEnvio } from "../api/configuracion";
 import Navbar from "../components/Navbar";
 import { toast } from "react-toastify";
 
@@ -6,12 +7,24 @@ export default function Carrito() {
   const [carrito, setCarrito] = useState([]);
   const [nombreFinca, setNombreFinca] = useState("");
   const [tiempoEntrega, setTiempoEntrega] = useState("5 días");
+  const [precioEnvio, setPrecioEnvio] = useState(0);
 
 
   useEffect(() => {
     const carritoGuardado = JSON.parse(localStorage.getItem("carrito")) || [];
     setCarrito(carritoGuardado);
+    cargarPrecioEnvio();
   }, []);
+
+  const cargarPrecioEnvio = async () => {
+    try {
+      const data = await obtenerPrecioEnvio();
+      console.log("👉 Precio recibido:", data); // TEMPORAL PARA VER
+      setPrecioEnvio(data.precioEnvio || data.valor || 0); // cobertura para cualquier nombre
+    } catch (error) {
+      toast.error("Error al obtener costo de envío");
+    }
+  };
 
   const vaciarCarrito = () => {
     localStorage.removeItem("carrito");
@@ -54,6 +67,7 @@ export default function Carrito() {
           productos,
           nombreFinca,
           tiempoEntrega,
+          precioEnvio,
         }),
       });
   
@@ -146,7 +160,10 @@ export default function Carrito() {
               </select>
             </div>
 
-            <h4 className="text-end mt-4">Total: ₡{calcularTotal()}</h4>
+            <h5 className="text-end">Costo de envío: ₡{precioEnvio}</h5>
+            <h4 className="text-end mt-2">
+              Total: ₡{calcularTotal() + (carrito.length > 0 ? precioEnvio : 0)}
+            </h4>
 
             <div className="d-flex justify-content-center gap-3 mt-4">
               <button onClick={vaciarCarrito} className="btn btn-danger">
