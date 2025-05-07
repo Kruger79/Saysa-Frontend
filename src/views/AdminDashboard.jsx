@@ -10,6 +10,8 @@ import {
 } from "react-icons/fa";
 import NavbarAdmin from "../components/Navbar";
 import { useLocation, Link } from "react-router-dom";
+import { toast } from 'react-toastify';
+
 
 export default function AdminDashboard() {
   const location = useLocation();
@@ -41,13 +43,14 @@ export default function AdminDashboard() {
 
       setPedidos((prev) =>
         prev.map((p) =>
-          p.IdCotizacion === idCotizacion
-            ? { ...p, Estado: nuevoEstado }
-            : p
+          p.IdCotizacion === idCotizacion ? { ...p, Estado: nuevoEstado } : p
         )
       );
+
+      toast.success(`Estado actualizado a "${nuevoEstado}"`);
     } catch (error) {
       console.error("Error al actualizar estado:", error);
+      toast.error("Error al actualizar el estado");
     }
   };
 
@@ -72,7 +75,9 @@ export default function AdminDashboard() {
             <li>
               <Link
                 to="/admin"
-                className={`sidebar-link ${isActive("/admin") ? "active-link" : ""}`}
+                className={`sidebar-link ${
+                  isActive("/admin") ? "active-link" : ""
+                }`}
               >
                 <FaTachometerAlt /> Dashboard
               </Link>
@@ -80,7 +85,9 @@ export default function AdminDashboard() {
             <li>
               <Link
                 to="/admin/usuarios"
-                className={`sidebar-link ${isActive("/admin/usuarios") ? "active-link" : ""}`}
+                className={`sidebar-link ${
+                  isActive("/admin/usuarios") ? "active-link" : ""
+                }`}
               >
                 <FaUsers /> Usuarios
               </Link>
@@ -88,7 +95,9 @@ export default function AdminDashboard() {
             <li>
               <Link
                 to="/admin/productos"
-                className={`sidebar-link ${isActive("/admin/productos") ? "active-link" : ""}`}
+                className={`sidebar-link ${
+                  isActive("/admin/productos") ? "active-link" : ""
+                }`}
               >
                 <FaBoxOpen /> Productos
               </Link>
@@ -102,11 +111,29 @@ export default function AdminDashboard() {
           <div className="admin-stats">
             <div className="stat-card">
               <h3>Pedidos pendientes</h3>
-              <p className="stat-number">{pedidos.length}</p>
+              <p className="stat-number">
+                {
+                  pedidos.filter(
+                    (p) =>
+                      p.Estado === "Pendiente" ||
+                      p.Estado === "pendiente" ||
+                      p.Estado === "Enviada" ||
+                      p.Estado === "enviada"
+                  ).length
+                }
+              </p>
             </div>
             <div className="stat-card">
               <h3>Cotizaciones del mes</h3>
-              <p className="stat-number">12</p>
+              <p className="stat-number">
+                {
+                  pedidos.filter(
+                    (p) =>
+                      p.Estado === "Aceptada" ||
+                      p.Estado === "aceptada"
+                  ).length
+                }
+              </p>
             </div>
           </div>
 
@@ -133,7 +160,14 @@ export default function AdminDashboard() {
                   {/* ✅ Estado */}
                   <td>
                     {pedido.IdCotizacion ? (
-                      editandoPedidoId === pedido.IdPedido ? (
+                      pedido.Estado === "Aceptada" ||
+                      pedido.Estado === "Rechazada" ? (
+                        <span
+                          className={`rol-badge ${pedido.Estado.toLowerCase()}`}
+                        >
+                          {pedido.Estado}
+                        </span>
+                      ) : editandoPedidoId === pedido.IdPedido ? (
                         <select
                           value={
                             estadosTemporales[pedido.IdPedido] ||
@@ -170,12 +204,16 @@ export default function AdminDashboard() {
                   {/* ✅ Acciones */}
                   <td>
                     {pedido.IdCotizacion ? (
-                      editandoPedidoId === pedido.IdPedido ? (
+                      pedido.Estado === "Aceptada" ||
+                      pedido.Estado === "Rechazada" ? (
+                        <span className="text-muted">—</span>
+                      ) : editandoPedidoId === pedido.IdPedido ? (
                         <button
                           className="btn btn-success"
                           onClick={async () => {
                             const nuevoEstado =
-                              estadosTemporales[pedido.IdPedido] || pedido.Estado;
+                              estadosTemporales[pedido.IdPedido] ||
+                              pedido.Estado;
                             await actualizarEstadoCotizacion(
                               pedido.IdCotizacion,
                               nuevoEstado
