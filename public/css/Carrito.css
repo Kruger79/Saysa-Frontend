@@ -1,39 +1,56 @@
-
-/* src/public/css/Carrito.css */
-.carrito-container {
-  padding-top: 4rem;
-  padding-bottom: 2rem;
+/* Contenedor general */
+.container {
+  max-width: 900px;
+  margin: auto;
 }
 
-.carrito-table th,
-.carrito-table td {
+/* Tabla */
+.table th, .table td {
   vertical-align: middle;
+  border-color: #e0e0e0;
 }
 
-.carrito-img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
+.table thead th {
+  background-color: #f9f9f9;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Imagen de producto */
+img {
   border-radius: 8px;
   border: 1px solid #ddd;
 }
 
-.carrito-actions {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-}
-
-.carrito-empty {
+/* Input de cantidad */
+input[type="number"] {
+  width: 70px;
   text-align: center;
-  color: #666;
-  font-style: italic;
+  font-weight: bold;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
-.img-carrito {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
+/* Quitar flechas de número (solo visual, no funcional en todos los navegadores) */
+input[type="number"]::-webkit-inner-spin-button {
+  opacity: 0.3;
+}
+
+/* Botones + / - */
+.btn-outline-secondary {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+/* Botones generales */
+button.btn {
+  min-width: 130px;
+  font-weight: 500;
   border-radius: 8px;
 }
+
+/* Texto*

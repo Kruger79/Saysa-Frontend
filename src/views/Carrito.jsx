@@ -9,7 +9,6 @@ export default function Carrito() {
   const [tiempoEntrega, setTiempoEntrega] = useState("5 días");
   const [precioEnvio, setPrecioEnvio] = useState(0);
 
-
   useEffect(() => {
     const carritoGuardado = JSON.parse(localStorage.getItem("carrito")) || [];
     setCarrito(carritoGuardado);
@@ -19,8 +18,7 @@ export default function Carrito() {
   const cargarPrecioEnvio = async () => {
     try {
       const data = await obtenerPrecioEnvio();
-      console.log("👉 Precio recibido:", data); // TEMPORAL PARA VER
-      setPrecioEnvio(data.precioEnvio || data.valor || 0); // cobertura para cualquier nombre
+      setPrecioEnvio(data.precioEnvio || data.valor || 0);
     } catch (error) {
       toast.error("Error al obtener costo de envío");
     }
@@ -31,11 +29,16 @@ export default function Carrito() {
     setCarrito([]);
   };
 
+  const actualizarCantidad = (index, nuevaCantidad) => {
+    const nuevoCarrito = [...carrito];
+    nuevaCantidad = Math.max(1, Math.min(100, nuevaCantidad));
+    nuevoCarrito[index].cantidad = nuevaCantidad;
+    setCarrito(nuevoCarrito);
+    localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
+  };
+
   const calcularTotal = () => {
-    return carrito.reduce(
-      (total, item) => total + item.Precio * item.cantidad,
-      0
-    );
+    return carrito.reduce((total, item) => total + item.Precio * item.cantidad, 0);
   };
 
   const confirmarPedido = async () => {
@@ -43,25 +46,23 @@ export default function Carrito() {
       toast.warning("El carrito está vacío.");
       return;
     }
-  
+
     const usuario = JSON.parse(localStorage.getItem("usuario"));
     if (!usuario) {
       toast.warning("Debe iniciar sesión para confirmar el pedido.");
       return;
     }
-  
+
     const productos = carrito.map((item) => ({
       idProducto: item.IdProducto,
       cantidad: item.cantidad,
       precioUnitario: item.Precio,
     }));
-  
+
     try {
       await fetch("http://localhost:3000/api/v1/cotizaciones", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           cedula: usuario.Cedula,
           productos,
@@ -70,17 +71,22 @@ export default function Carrito() {
           precioEnvio,
         }),
       });
-  
+
       toast.success("¡Cotización enviada y guardada con éxito!");
       vaciarCarrito();
-  
-      // ✅ Mensaje con nombres
-      const mensaje = carrito
-        .map((item) => `🔹 ${item.cantidad} x ${item.Nombre}`)
-        .join("%0A");
-  
-      const numero = "50689864016";
-      window.open(`https://wa.me/${numero}?text=Hola!, quisiera realizar un pedido con los siguientes productos:%0A${mensaje}`, "_blank");
+
+      // Generar mensaje de WhatsApp
+      let mensaje = `Hola!, quisiera realizar un pedido con los siguientes productos:\n\n`;
+      carrito.forEach((item) => {
+        mensaje += `${item.cantidad} x ${item.Nombre} - ₡${(item.Precio * item.cantidad).toLocaleString()}\n`;
+      });
+      mensaje += `Cliente: ${usuario.Nombre}\n\n`;
+      mensaje += `Costo de envío: ₡${precioEnvio.toLocaleString()}\n`;
+      mensaje += `Total final: ₡${(calcularTotal() + precioEnvio).toLocaleString()}`;
+
+      const numero = "50689864016"; // Cambia por el número de la clienta
+      const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, "_blank");
     } catch (error) {
       console.error("Error al enviar:", error);
       toast.error("Error al guardar el pedido.");
@@ -97,8 +103,8 @@ export default function Carrito() {
           <p className="text-center">No hay productos en el carrito.</p>
         ) : (
           <>
-            <table className="table table-striped text-center">
-              <thead>
+            <table className="table table-bordered text-center align-middle">
+              <thead className="table-light">
                 <tr>
                   <th>Imagen</th>
                   <th>Producto</th>
@@ -114,17 +120,41 @@ export default function Carrito() {
                       <img
                         src={item.ImagenUrl}
                         alt={item.Nombre}
-                        style={{
-                          width: "80px",
-                          height: "80px",
-                          objectFit: "cover",
-                        }}
+                        style={{ width: "80px", height: "80px", objectFit: "cover", borderRadius: "8px" }}
                       />
                     </td>
                     <td>{item.Nombre}</td>
                     <td>₡{item.Precio}</td>
-                    <td>{item.cantidad}</td>
-                    <td>₡{item.Precio * item.cantidad}</td>
+                    <td>
+                      <div className="d-flex justify-content-center align-items-center gap-2">
+                        <button
+                          className="btn btn-outline-secondary btn-sm"
+                          onClick={() => actualizarCantidad(index, item.cantidad - 1)}
+                          title="Disminuir"
+                        >
+                          −
+                        </button>
+                        <input
+                          type="number"
+                          min="1"
+                          max="100"
+                          value={item.cantidad}
+                          onChange={(e) =>
+                            actualizarCantidad(index, parseInt(e.target.value) || 1)
+                          }
+                          className="form-control"
+                          style={{ width: "70px", textAlign: "center", fontWeight: "bold" }}
+                        />
+                        <button
+                          className="btn btn-outline-secondary btn-sm"
+                          onClick={() => actualizarCantidad(index, item.cantidad + 1)}
+                          title="Aumentar"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+                    <td>₡{(item.Precio * item.cantidad).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
@@ -160,13 +190,13 @@ export default function Carrito() {
               </select>
             </div>
 
-            <h5 className="text-end">Costo de envío: ₡{precioEnvio}</h5>
+            <h5 className="text-end">Costo de envío: ₡{precioEnvio.toLocaleString()}</h5>
             <h4 className="text-end mt-2">
-              Total: ₡{calcularTotal() + (carrito.length > 0 ? precioEnvio : 0)}
+              Total: ₡{(calcularTotal() + (carrito.length > 0 ? precioEnvio : 0)).toLocaleString()}
             </h4>
 
             <div className="d-flex justify-content-center gap-3 mt-4">
-              <button onClick={vaciarCarrito} className="btn btn-danger">
+              <button onClick={vaciarCarrito} className="btn btn-outline-danger">
                 Vaciar carrito
               </button>
               <button onClick={confirmarPedido} className="btn btn-success">
