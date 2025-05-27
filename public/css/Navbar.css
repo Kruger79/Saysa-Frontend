@@ -1,24 +1,32 @@
-/* Color blanco base */
+/* Íconos blancos */
 .navbar .icon-white {
   color: white;
 }
 
-/* Transiciones y animaciones de íconos */
+/* Animación al pasar el mouse */
 .navbar .icon-hover {
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
-/* Efecto al pasar el mouse */
 .navbar .icon-hover:hover {
   color: #10b981;
-  /* Color verde SaYSa al hacer hover */
   transform: scale(1.2);
-  /* Pequeño zoom del 20% */
 }
 
+/* Fijo arriba */
 .navbar {
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 999;
+}
+
+/* Corrige que el menú no colapse al volver a desktop */
+@media (min-width: 992px) {
+  .navbar-collapse {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
