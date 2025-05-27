@@ -41,6 +41,15 @@ export default function Carrito() {
     return carrito.reduce((total, item) => total + item.Precio * item.cantidad, 0);
   };
 
+
+  const eliminarDelCarrito = (index) => {
+  const nuevoCarrito = [...carrito];
+  nuevoCarrito.splice(index, 1);
+  setCarrito(nuevoCarrito);
+  localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
+};
+
+
   const confirmarPedido = async () => {
     if (carrito.length === 0) {
       toast.warning("El carrito está vacío.");
@@ -52,6 +61,7 @@ export default function Carrito() {
       toast.warning("Debe iniciar sesión para confirmar el pedido.");
       return;
     }
+
 
     const productos = carrito.map((item) => ({
       idProducto: item.IdProducto,
@@ -75,7 +85,6 @@ export default function Carrito() {
       toast.success("¡Cotización enviada y guardada con éxito!");
       vaciarCarrito();
 
-      // Generar mensaje de WhatsApp
       let mensaje = `Hola!, quisiera realizar un pedido con los siguientes productos:\n\n`;
       carrito.forEach((item) => {
         mensaje += `${item.cantidad} x ${item.Nombre} - ₡${(item.Precio * item.cantidad).toLocaleString()}\n`;
@@ -84,7 +93,7 @@ export default function Carrito() {
       mensaje += `Costo de envío: ₡${precioEnvio.toLocaleString()}\n`;
       mensaje += `Total final: ₡${(calcularTotal() + precioEnvio).toLocaleString()}`;
 
-      const numero = "50689864016"; // Cambia por el número de la clienta
+      const numero = "50689864016";
       const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
       window.open(url, "_blank");
     } catch (error) {
@@ -103,62 +112,74 @@ export default function Carrito() {
           <p className="text-center">No hay productos en el carrito.</p>
         ) : (
           <>
-            <table className="table table-bordered text-center align-middle">
-              <thead className="table-light">
-                <tr>
-                  <th>Imagen</th>
-                  <th>Producto</th>
-                  <th>Precio</th>
-                  <th>Cantidad</th>
-                  <th>Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>
-                {carrito.map((item, index) => (
-                  <tr key={index}>
-                    <td>
-                      <img
-                        src={item.ImagenUrl}
-                        alt={item.Nombre}
-                        style={{ width: "80px", height: "80px", objectFit: "cover", borderRadius: "8px" }}
-                      />
-                    </td>
-                    <td>{item.Nombre}</td>
-                    <td>₡{item.Precio}</td>
-                    <td>
-                      <div className="d-flex justify-content-center align-items-center gap-2">
-                        <button
-                          className="btn btn-outline-secondary btn-sm"
-                          onClick={() => actualizarCantidad(index, item.cantidad - 1)}
-                          title="Disminuir"
-                        >
-                          −
-                        </button>
-                        <input
-                          type="number"
-                          min="1"
-                          max="100"
-                          value={item.cantidad}
-                          onChange={(e) =>
-                            actualizarCantidad(index, parseInt(e.target.value) || 1)
-                          }
-                          className="form-control"
-                          style={{ width: "70px", textAlign: "center", fontWeight: "bold" }}
-                        />
-                        <button
-                          className="btn btn-outline-secondary btn-sm"
-                          onClick={() => actualizarCantidad(index, item.cantidad + 1)}
-                          title="Aumentar"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </td>
-                    <td>₡{(item.Precio * item.cantidad).toLocaleString()}</td>
+            <div className="carrito-table-container">
+              <table className="table table-bordered text-center align-middle carrito-table">
+                <thead className="table-light">
+                  <tr>
+                    <th>Imagen</th>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                    <th></th> {/* Nueva columna vacía para el botón eliminar */}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {carrito.map((item, index) => (
+                    <tr key={index}>
+                      <td>
+                        <img
+                          src={item.ImagenUrl}
+                          alt={item.Nombre}
+                          style={{ width: "80px", height: "80px", objectFit: "cover", borderRadius: "8px" }}
+                        />
+                      </td>
+                      <td>{item.Nombre}</td>
+                      <td>₡{item.Precio}</td>
+                      <td>
+                        <div className="d-flex justify-content-center align-items-center gap-2">
+                          <button
+                            className="btn btn-outline-secondary btn-sm"
+                            onClick={() => actualizarCantidad(index, item.cantidad - 1)}
+                            title="Disminuir"
+                          >
+                            −
+                          </button>
+                          <input
+                            type="number"
+                            min="1"
+                            max="100"
+                            value={item.cantidad}
+                            onChange={(e) =>
+                              actualizarCantidad(index, parseInt(e.target.value) || 1)
+                            }
+                            className="form-control"
+                            style={{ width: "70px", textAlign: "center", fontWeight: "bold" }}
+                          />
+                          <button
+                            className="btn btn-outline-secondary btn-sm"
+                            onClick={() => actualizarCantidad(index, item.cantidad + 1)}
+                            title="Aumentar"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </td>
+                      <td>₡{(item.Precio * item.cantidad).toLocaleString()}</td>
+                      <td>
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => eliminarDelCarrito(index)}
+                          title="Eliminar producto"
+                        >
+                          🗑️
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
             <div className="mb-4">
               <label htmlFor="finca" className="form-label">

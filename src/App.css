@@ -1,5 +1,15 @@
+/* Estilo base */
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
+}
+
+/* Corrección para móviles */
+@media (max-width: 768px) {
+  #root {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+  }
 }

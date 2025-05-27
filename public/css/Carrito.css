@@ -1,3 +1,5 @@
+/* Carrito.css completo con responsividad */
+
 /* Contenedor general */
 .container {
   max-width: 900px;
@@ -66,17 +68,12 @@ button.btn {
   font-style: italic;
 }
 
-.img-carrito {
+.img-carrito, .carrito-img {
   width: 80px;
   height: 80px;
   object-fit: cover;
 }
 
-.carrito-img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-}
 .carrito-container {
   padding-top: 4rem;
   padding-bottom: 2rem;
@@ -87,4 +84,28 @@ button.btn {
   vertical-align: middle;
 }
 
+/* Responsividad general para móviles */
+@media (max-width: 768px) {
+  body {
+    all: unset !important;
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #fff !important;
+  }
 
+  .container {
+    max-width: 100% !important;
+    padding: 0 10px !important;
+  }
+
+  .carrito-table-container {
+    overflow-x: auto;
+    width: 100%;
+  }
+
+  .carrito-table {
+    min-width: 600px;
+  }
+}
