@@ -1,11 +1,16 @@
+/* =================== CONTENEDOR PRINCIPAL =================== */
+
 .register-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #f0fdf4, #fefce8);
-  /* contraste tropical suave */
+  min-height: 100vh;               /* Altura mínima segura */
+  padding: 2rem 1rem;              /* Espacio para evitar recorte en móvil */
+  background: linear-gradient(135deg, #f0fdf4, #fefce8); /* Contraste tropical */
+  box-sizing: border-box;
 }
+
+/* =================== TARJETA DE REGISTRO =================== */
 
 .register-card {
   background: #fff;
@@ -16,15 +21,19 @@
   text-align: center;
 }
 
+/* Logo superior */
 .register-logo {
   width: 90px;
   margin-bottom: 1rem;
 }
 
+/* Subtítulo */
 .register-subtitle {
   color: #555;
   margin-bottom: 1.5rem;
 }
+
+/* =================== FORMULARIO =================== */
 
 .register-form {
   display: flex;
@@ -32,6 +41,7 @@
   gap: 1rem;
 }
 
+/* Entradas */
 .register-input {
   padding: 0.75rem;
   border: 1px solid #ccc;
@@ -39,6 +49,7 @@
   font-size: 1rem;
 }
 
+/* Botón */
 .register-button {
   background-color: #22c55e;
   color: white;
@@ -54,39 +65,90 @@
   background-color: #16a34a;
 }
 
+/* Footer */
 .register-footer {
   margin-top: 1rem;
   font-size: 0.9rem;
   color: #666;
 }
 
+/* =================== CARGANDO =================== */
+
 .spinner {
   border: 3px solid #f3f3f3;
-  /* Color fondo */
   border-top: 3px solid #10b981;
-  /* Color SaYSa animado */
   border-radius: 50%;
   width: 20px;
   height: 20px;
   animation: spin 0.8s linear infinite;
   margin: 0 auto;
-  /* Centrado */
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .disabled-button {
   background-color: #9ca3af;
-  /* gris clarito */
   cursor: not-allowed;
-  /* mano bloqueada */
   opacity: 0.8;
+}
+
+/* =================== RESPONSIVE =================== */
+
+/* Tablets y móviles */
+@media (max-width: 768px) {
+  .register-card {
+    width: 90%;
+    padding: 2rem;
+  }
+
+  .register-logo {
+    width: 70px;
+  }
+
+  .register-input {
+    font-size: 0.95rem;
+    padding: 0.65rem;
+  }
+
+  .register-button {
+    font-size: 0.95rem;
+    padding: 0.65rem;
+  }
+
+  .register-footer {
+    font-size: 0.85rem;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+  .register-card {
+    padding: 1.5rem;
+  }
+
+  .register-logo {
+    width: 60px;
+    margin-bottom: 0.8rem;
+  }
+
+  .register-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .register-input {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .register-button {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .register-footer {
+    font-size: 0.8rem;
+  }
 }
