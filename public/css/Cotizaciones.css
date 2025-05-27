@@ -1,56 +1,118 @@
-/* Estilo general */
+/* ================== PÁGINA GENERAL ================== */
+
 .cotizaciones-page {
-    padding: 2rem;
-    background-color: #f8f9fa;
-    min-height: 100vh;
-  }
-  
-  /* Título */
+  padding: 2rem 1rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.cotizaciones-page h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* ================== NOMBRE Y CÉDULA ================== */
+
+.cotizaciones-cliente {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  color: #555;
+}
+
+.cotizaciones-cliente p {
+  margin: 0.3rem 0;
+}
+
+/* ================== TABLA ================== */
+
+.table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.cotizaciones-table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+  margin: auto;
+}
+
+.cotizaciones-table th,
+.cotizaciones-table td {
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.cotizaciones-table thead {
+  background-color: #343a40;
+  color: white;
+}
+
+.cotizaciones-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table th,
+table td {
+  vertical-align: middle;
+}
+
+/* ================== MENSAJE DE VACÍO ================== */
+
+.cotizaciones-vacio {
+  text-align: center;
+  margin-top: 2rem;
+  color: #777;
+  font-style: italic;
+}
+
+/* ================== RESPONSIVE TABLET ================== */
+
+@media (max-width: 768px) {
   .cotizaciones-page h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-weight: bold;
-    color: #333;
+    font-size: 1.5rem;
   }
-  
-  /* Tabla */
+
+  .cotizaciones-cliente {
+    font-size: 0.95rem;
+  }
+
   .cotizaciones-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin: auto;
+    font-size: 0.9rem;
   }
-  
+
   .cotizaciones-table th,
   .cotizaciones-table td {
-    border: 1px solid #dee2e6;
-    padding: 0.75rem;
-    text-align: center;
+    padding: 0.6rem;
   }
-  
-  .cotizaciones-table thead {
-    background-color: #343a40;
-    color: white;
+}
+
+/* ================== RESPONSIVE MÓVIL ================== */
+
+@media (max-width: 480px) {
+  .cotizaciones-page h2 {
+    font-size: 1.2rem;
   }
-  
-  .cotizaciones-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
+
+  .cotizaciones-cliente {
+    font-size: 0.85rem;
   }
-  
-  /* Mensaje vacío */
-  .cotizaciones-vacio {
-    text-align: center;
-    margin-top: 2rem;
-    color: #777;
-    font-style: italic;
+
+  .cotizaciones-table {
+    font-size: 0.8rem;
+    min-width: 100%; /* ahora se adapta al ancho del dispositivo */
+    word-wrap: break-word;
+    table-layout: fixed;
   }
-  
-  .container {
-    max-width: 1000px;
+
+  .cotizaciones-table th,
+  .cotizaciones-table td {
+    padding: 0.4rem;
   }
-  
-  table th, table td {
-    vertical-align: middle;
-  }
-  
+}

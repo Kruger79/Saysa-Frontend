@@ -35,38 +35,40 @@ export default function Cotizaciones() {
       <Navbar />
       <div className="container mt-5 pt-5">
         <h2 className="mb-4 text-center">Mis Cotizaciones</h2>
-        {usuario && (
-          <div className="text-center mb-3">
-            <strong>Cliente:</strong> {usuario.Nombre} <br />
-            <strong>Cédula:</strong> {usuario.Cedula}
-          </div>
-        )}
+       {usuario && (
+        <div className="cotizaciones-cliente">
+          <p><strong>Cliente:</strong> {usuario.Nombre}</p>
+          <p><strong>Cédula:</strong> {usuario.Cedula}</p>
+        </div>
+      )}
+
 
         {cotizaciones.length === 0 ? (
           <p className="text-center">No hay cotizaciones registradas aún.</p>
         ) : (
-          <div className="table-responsive">
-            <table className="table table-bordered text-center">
-              <thead className="table-light">
-                <tr>
-                  <th>ID Cotización</th>
-                  <th>Fecha</th>
-                  <th>Estado</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cotizaciones.map((coti) => (
-                  <tr key={coti.IdCotizacion}>
-                    <td>{coti.IdCotizacion}</td>
-                    <td>{new Date(coti.FechaSolicitud).toLocaleDateString()}</td>
-                    <td>{coti.Estado}</td>
-                    <td>₡{coti.Total ?? calcularTotal(coti.Detalles)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <div className="table-wrapper">
+  <table className="cotizaciones-table">
+    <thead>
+      <tr>
+        <th>ID Cotización</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {cotizaciones.map((coti) => (
+        <tr key={coti.IdCotizacion}>
+          <td>{coti.IdCotizacion}</td>
+          <td>{new Date(coti.FechaSolicitud).toLocaleDateString()}</td>
+          <td>{coti.Estado}</td>
+          <td>₡{coti.Total ?? calcularTotal(coti.Detalles)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+        
         )}
       </div>
     </div>
