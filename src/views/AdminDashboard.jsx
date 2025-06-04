@@ -18,6 +18,7 @@ export default function AdminDashboard() {
   const [pedidos, setPedidos] = useState([]);
   const [editandoPedidoId, setEditandoPedidoId] = useState(null);
   const [estadosTemporales, setEstadosTemporales] = useState({});
+  const [busqueda, setBusqueda] = useState(""); // 1. Estado para búsqueda
 
   useEffect(() => {
     async function fetchPedidos() {
@@ -65,10 +66,17 @@ export default function AdminDashboard() {
           .padStart(2, "0")}/${f.getFullYear()}`;
   };
 
+  // 2. Filtrar pedidos por nombre o cédula si hay búsqueda
+  const pedidosFiltrados = busqueda
+    ? pedidos.filter((pedido) =>
+        (pedido.NombreCliente?.toLowerCase().includes(busqueda.toLowerCase()) ||
+         pedido.Cedula?.toString().includes(busqueda))
+      )
+    : pedidos;
+
   return (
     <div className="admin-dashboard">
       <NavbarAdmin />
-
       <div className="admin-body">
         <aside className="admin-sidebar">
           <ul className="sidebar-menu">
@@ -150,7 +158,7 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {pedidos.map((pedido) => (
+              {pedidosFiltrados.map((pedido) => (
                 <tr key={pedido.IdPedido}>
                   <td>{pedido.IdPedido}</td>
                   <td>{formatearFecha(pedido.FechaPedido)}</td>
@@ -249,7 +257,12 @@ export default function AdminDashboard() {
           <div className="busqueda">
             <h3>Buscar cotizaciones</h3>
             <div className="search-bar">
-              <input type="text" placeholder="Buscar cotizaciones..." />
+              <input
+                type="text"
+                placeholder="Buscar por nombre o cedula"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+              />
               <button>
                 <FaSearch />
               </button>
