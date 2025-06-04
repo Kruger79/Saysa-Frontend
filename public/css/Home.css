@@ -86,6 +86,11 @@
 .card p {
   font-size: 0.9rem;
   padding: 0 10px;
+}.whatsapp-button {
+  margin-top: 0 !important;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .card:hover {

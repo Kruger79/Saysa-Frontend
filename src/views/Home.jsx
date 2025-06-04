@@ -45,7 +45,7 @@ export default function Home() {
               />
               <h3>Seleccionar Productos</h3>
               <p>Agrega los productos que necesites al carrito.</p>
-            </div>
+               </div>
 
             <div className="card">
               <img
@@ -59,6 +59,9 @@ export default function Home() {
         </div>
 
         {/* Botón de WhatsApp */}
+        <p style={{ textAlign: "center", marginTop: 32 }}>
+          Si no encuentras el producto deseado envíanos un mensaje para ayudarte
+        </p>
         <a
           href="https://wa.me/50689864016"
           className="whatsapp-button"
