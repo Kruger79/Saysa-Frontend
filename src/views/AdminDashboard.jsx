@@ -18,7 +18,8 @@ export default function AdminDashboard() {
   const [pedidos, setPedidos] = useState([]);
   const [editandoPedidoId, setEditandoPedidoId] = useState(null);
   const [estadosTemporales, setEstadosTemporales] = useState({});
-  const [busqueda, setBusqueda] = useState(""); // 1. Estado para búsqueda
+  const [busqueda, setBusqueda] = useState("");
+  const [filtroEstado, setFiltroEstado] = useState("todos"); // Nuevo estado para el filtro
 
   useEffect(() => {
     async function fetchPedidos() {
@@ -66,13 +67,19 @@ export default function AdminDashboard() {
           .padStart(2, "0")}/${f.getFullYear()}`;
   };
 
-  // 2. Filtrar pedidos por nombre o cédula si hay búsqueda
-  const pedidosFiltrados = busqueda
-    ? pedidos.filter((pedido) =>
-        (pedido.NombreCliente?.toLowerCase().includes(busqueda.toLowerCase()) ||
-         pedido.Cedula?.toString().includes(busqueda))
-      )
-    : pedidos;
+  // Filtrar por búsqueda y estado
+  const pedidosFiltrados = pedidos.filter((pedido) => {
+    const coincideBusqueda =
+      !busqueda ||
+      pedido.NombreCliente?.toLowerCase().includes(busqueda.toLowerCase()) ||
+      pedido.Cedula?.toString().includes(busqueda);
+
+    const coincideEstado =
+      filtroEstado === "todos" ||
+      (pedido.Estado?.toLowerCase() === filtroEstado);
+
+    return coincideBusqueda && coincideEstado;
+  });
 
   return (
     <div className="admin-dashboard">
@@ -142,6 +149,62 @@ export default function AdminDashboard() {
                   ).length
                 }
               </p>
+            </div>
+          </div>
+
+          {/* Filtro de estado y buscador en línea */}
+          <div className="filtros-superiores" style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24 }}>
+            <div className="filtro-estado" style={{ margin: 0 }}>
+              <label htmlFor="filtroEstado" style={{ marginRight: 8, fontWeight: 500 }}>
+                Estado:
+              </label>
+              <select
+                id="filtroEstado"
+                value={filtroEstado}
+                onChange={(e) => setFiltroEstado(e.target.value)}
+                style={{ padding: "6px 12px", borderRadius: 6, border: "1px solid #ccc", background: "#fff" }}
+              >
+                <option value="todos">Todos</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="enviada">Enviada</option>
+                <option value="aceptada">Aceptada</option>
+                <option value="rechazada">Rechazada</option>
+              </select>
+            </div>
+            <div className="busqueda" style={{ flex: 1 }}>
+              <form
+                className="search-bar"
+                style={{ display: "flex", alignItems: "center", gap: 0 }}
+                onSubmit={e => e.preventDefault()}
+              >
+                <input
+                  type="text"
+                  placeholder="Buscar por nombre o cédula"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  style={{
+                    flex: 1,
+                    padding: "6px 12px",
+                    borderRadius: "6px 0 0 6px",
+                    border: "1px solid #ccc",
+                    borderRight: "none",
+                    background: "#fff"
+                  }}
+                />
+                <button
+                  type="submit"
+                  style={{
+                    padding: "6px 12px",
+                    borderRadius: "0 6px 6px 0",
+                    border: "1px solid #007bff",
+                    background: "#007bff",
+                    color: "#fff",
+                    cursor: "pointer"
+                  }}
+                >
+                  <FaSearch />
+                </button>
+              </form>
             </div>
           </div>
 
@@ -253,21 +316,6 @@ export default function AdminDashboard() {
               ))}
             </tbody>
           </table>
-
-          <div className="busqueda">
-            <h3>Buscar cotizaciones</h3>
-            <div className="search-bar">
-              <input
-                type="text"
-                placeholder="Buscar por nombre o cedula"
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-              />
-              <button>
-                <FaSearch />
-              </button>
-            </div>
-          </div>
         </main>
       </div>
     </div>
