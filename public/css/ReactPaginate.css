@@ -1,0 +1,44 @@
+.text-success {
+  color: #1B4332 !important; /* Verde oscuro del logo */
+}
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.pagina {
+  list-style: none;
+}
+
+.pagina-link {
+  padding: 8px 14px;
+  border: 2px solid #1B4332;
+  border-radius: 8px;
+  color: #1B4332;
+  background-color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.pagina-link:hover {
+  background-color: #FFD60A;
+  color: #1B4332;
+  border-color: #FFD60A;
+}
+
+.activa .pagina-link {
+  background-color: #1B4332;
+  color: #fff;
+  font-weight: bold;
+}
+
+.deshabilitada .pagina-link {
+  opacity: 0.4;
+  pointer-events: none;
+}

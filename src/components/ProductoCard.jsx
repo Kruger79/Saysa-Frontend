@@ -27,13 +27,14 @@ export default function ProductoCard({ producto, reverse }) {
       <div className="producto-card-img">
         <img src={producto.ImagenUrl} alt={producto.Nombre} />
       </div>
-  
 
       {/* Información del producto */}
       <div className="producto-card-info">
         <h2>{producto.Nombre}</h2>
         <p>{producto.Descripcion}</p>
-        <p className="precio"><strong>Precio:</strong> ${producto.Precio}</p>
+        <p className="precio">
+          <strong>Precio:</strong> ${producto.Precio}
+        </p>
 
         {/* Botón para agregar al carrito */}
         <button className="btn-agregar" onClick={agregarAlCarrito}>

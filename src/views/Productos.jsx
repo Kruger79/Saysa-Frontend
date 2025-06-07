@@ -27,10 +27,10 @@ export default function Carrito() {
     }
 
     const pedidoData = {
-      cedula: usuario.Cedula, // Cambia si tu backend pide otro campo
+      cedula: usuario.Cedula,
       productos: carrito.map((item) => ({
         idProducto: item.IdProducto,
-        cantidad: 1, // Podrías mejorar luego con cantidades dinámicas
+        cantidad: 1,
       })),
     };
 

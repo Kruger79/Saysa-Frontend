@@ -7,11 +7,14 @@ import {
   FaBoxOpen,
   FaEdit,
   FaCheck,
+  FaArrowLeft,
+  FaArrowRight,
 } from "react-icons/fa";
 import NavbarAdmin from "../components/Navbar";
 import { useLocation, Link } from "react-router-dom";
-import { toast } from 'react-toastify';
-
+import { toast } from "react-toastify";
+import ReactPaginate from "react-paginate";
+import "../../public/css/ReactPaginate.css";
 
 export default function AdminDashboard() {
   const location = useLocation();
@@ -20,6 +23,8 @@ export default function AdminDashboard() {
   const [estadosTemporales, setEstadosTemporales] = useState({});
   const [busqueda, setBusqueda] = useState("");
   const [filtroEstado, setFiltroEstado] = useState("todos"); // Nuevo estado para el filtro
+  const [paginaActual, setPaginaActual] = useState(0); // react-paginate empieza desde 0
+  const itemsPorPagina = 6;
 
   useEffect(() => {
     async function fetchPedidos() {
@@ -75,11 +80,21 @@ export default function AdminDashboard() {
       pedido.Cedula?.toString().includes(busqueda);
 
     const coincideEstado =
-      filtroEstado === "todos" ||
-      (pedido.Estado?.toLowerCase() === filtroEstado);
+      filtroEstado === "todos" || pedido.Estado?.toLowerCase() === filtroEstado;
 
     return coincideBusqueda && coincideEstado;
   });
+
+  const offset = paginaActual * itemsPorPagina;
+  const pedidosPaginados = pedidosFiltrados.slice(
+    offset,
+    offset + itemsPorPagina
+  );
+  const totalPaginas = Math.ceil(pedidosFiltrados.length / itemsPorPagina);
+
+  const handlePageClick = ({ selected }) => {
+    setPaginaActual(selected);
+  };
 
   return (
     <div className="admin-dashboard">
@@ -128,12 +143,10 @@ export default function AdminDashboard() {
               <h3>Pedidos pendientes</h3>
               <p className="stat-number">
                 {
-                  pedidos.filter(
-                    (p) =>
-                      p.Estado === "Pendiente" ||
-                      p.Estado === "pendiente" ||
-                      p.Estado === "Enviada" ||
-                      p.Estado === "enviada"
+                  pedidos.filter((p) =>
+                    ["Pendiente", "pendiente", "Enviada", "enviada"].includes(
+                      p.Estado
+                    )
                   ).length
                 }
               </p>
@@ -142,27 +155,40 @@ export default function AdminDashboard() {
               <h3>Cotizaciones del mes</h3>
               <p className="stat-number">
                 {
-                  pedidos.filter(
-                    (p) =>
-                      p.Estado === "Aceptada" ||
-                      p.Estado === "aceptada"
+                  pedidos.filter((p) =>
+                    ["Aceptada", "aceptada"].includes(p.Estado)
                   ).length
                 }
               </p>
             </div>
           </div>
 
-          {/* Filtro de estado y buscador en línea */}
-          <div className="filtros-superiores" style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24 }}>
+          <div
+            className="filtros-superiores"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 16,
+              marginBottom: 24,
+            }}
+          >
             <div className="filtro-estado" style={{ margin: 0 }}>
-              <label htmlFor="filtroEstado" style={{ marginRight: 8, fontWeight: 500 }}>
+              <label
+                htmlFor="filtroEstado"
+                style={{ marginRight: 8, fontWeight: 500 }}
+              >
                 Estado:
               </label>
               <select
                 id="filtroEstado"
                 value={filtroEstado}
                 onChange={(e) => setFiltroEstado(e.target.value)}
-                style={{ padding: "6px 12px", borderRadius: 6, border: "1px solid #ccc", background: "#fff" }}
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: 6,
+                  border: "1px solid #ccc",
+                  background: "#fff",
+                }}
               >
                 <option value="todos">Todos</option>
                 <option value="pendiente">Pendiente</option>
@@ -174,8 +200,8 @@ export default function AdminDashboard() {
             <div className="busqueda" style={{ flex: 1 }}>
               <form
                 className="search-bar"
+                onSubmit={(e) => e.preventDefault()}
                 style={{ display: "flex", alignItems: "center", gap: 0 }}
-                onSubmit={e => e.preventDefault()}
               >
                 <input
                   type="text"
@@ -188,7 +214,7 @@ export default function AdminDashboard() {
                     borderRadius: "6px 0 0 6px",
                     border: "1px solid #ccc",
                     borderRight: "none",
-                    background: "#fff"
+                    background: "#fff",
                   }}
                 />
                 <button
@@ -199,7 +225,7 @@ export default function AdminDashboard() {
                     border: "1px solid #007bff",
                     background: "#007bff",
                     color: "#fff",
-                    cursor: "pointer"
+                    cursor: "pointer",
                   }}
                 >
                   <FaSearch />
@@ -221,18 +247,15 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {pedidosFiltrados.map((pedido) => (
+              {pedidosPaginados.map((pedido) => (
                 <tr key={pedido.IdPedido}>
                   <td>{pedido.IdPedido}</td>
                   <td>{formatearFecha(pedido.FechaPedido)}</td>
                   <td>{pedido.NombreCliente}</td>
                   <td>{pedido.Cedula}</td>
-
-                  {/* ✅ Estado */}
                   <td>
                     {pedido.IdCotizacion ? (
-                      pedido.Estado === "Aceptada" ||
-                      pedido.Estado === "Rechazada" ? (
+                      ["Aceptada", "Rechazada"].includes(pedido.Estado) ? (
                         <span
                           className={`rol-badge ${pedido.Estado.toLowerCase()}`}
                         >
@@ -271,12 +294,9 @@ export default function AdminDashboard() {
                       <span className="rol-badge sin-estado">Sin estado</span>
                     )}
                   </td>
-
-                  {/* ✅ Acciones */}
                   <td>
                     {pedido.IdCotizacion ? (
-                      pedido.Estado === "Aceptada" ||
-                      pedido.Estado === "Rechazada" ? (
+                      ["Aceptada", "Rechazada"].includes(pedido.Estado) ? (
                         <span className="text-muted">—</span>
                       ) : editandoPedidoId === pedido.IdPedido ? (
                         <button
@@ -316,6 +336,30 @@ export default function AdminDashboard() {
               ))}
             </tbody>
           </table>
+
+          {/* ✅ PAGINACIÓN */}
+          <ReactPaginate
+            previousLabel={
+              <span className="d-flex align-items-center gap-2 text-success">
+                <FaArrowLeft /> Anterior
+              </span>
+            }
+            nextLabel={
+              <span className="d-flex align-items-center gap-2 text-success">
+                Siguiente <FaArrowRight />
+              </span>
+            }
+            breakLabel={"..."}
+            pageCount={totalPaginas}
+            onPageChange={handlePageClick}
+            containerClassName={"paginacion"}
+            pageClassName={"pagina"}
+            pageLinkClassName={"pagina-link"}
+            activeClassName={"activa"}
+            previousClassName={"pagina"}
+            nextClassName={"pagina"}
+            disabledClassName={"deshabilitada"}
+          />
         </main>
       </div>
     </div>

@@ -3,7 +3,12 @@ import { Modal, Button } from "react-bootstrap";
 import { eliminarProducto } from "../api/productos";
 import { toast } from "react-toastify";
 
-const ModalEliminarProducto = ({ show, handleClose, producto, onProductoEliminado }) => {
+const ModalEliminarProducto = ({
+  show,
+  handleClose,
+  producto,
+  onProductoEliminado,
+}) => {
   const handleEliminar = async () => {
     try {
       await eliminarProducto(producto.IdProducto);
@@ -23,7 +28,10 @@ const ModalEliminarProducto = ({ show, handleClose, producto, onProductoEliminad
         <Modal.Title>Confirmar Eliminación</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>¿Estás seguro que deseas eliminar el producto <strong>{producto.Nombre}</strong>?</p>
+        <p>
+          ¿Estás seguro que deseas eliminar el producto{" "}
+          <strong>{producto.Nombre}</strong>?
+        </p>
         <p>Esta acción no se puede deshacer.</p>
       </Modal.Body>
       <Modal.Footer>

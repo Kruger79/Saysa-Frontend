@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { FaUserCircle, FaShoppingCart, FaBars } from "react-icons/fa";
+import { toast } from "react-toastify";
 import logo from "../../public/logo-saysa.png";
 import "../../public/css/Navbar.css";
+import LoadingOverlay from "./LoadingOverlay";
 
 export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [cargando, setCargando] = useState(false);
 
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   const rol = usuario?.Rol;
@@ -17,7 +20,16 @@ export default function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("usuario");
-    navigate("/");
+    setCargando(true); // Mostrar pantalla de carga
+
+    toast.success("Sesión cerrada correctamente ✅, Gracias por visitarnos", {
+      position: "top-center",
+      autoClose: 2000,
+    });
+
+    setTimeout(() => {
+      window.location.href = window.location.origin;
+    }, 2500);
   };
 
   return (
@@ -43,27 +55,37 @@ export default function Navbar() {
         {/* MENÚ RESPONSIVO */}
         <div
           className={`collapse navbar-collapse justify-content-between ${
-            showMobileMenu ? "show d-flex flex-column flex-lg-row mt-3 mt-lg-0" : ""
+            showMobileMenu
+              ? "show d-flex flex-column flex-lg-row mt-3 mt-lg-0"
+              : ""
           }`}
         >
           <div className="d-flex flex-column flex-lg-row align-items-lg-center gap-3 ms-lg-4">
             {rol === "admin" && (
               <Link
                 to="/admin"
-                className={`nav-link ${isActive("/admin") ? "active text-info" : "text-white"}`}
+                className={`nav-link ${
+                  isActive("/admin") ? "active text-info" : "text-white"
+                }`}
               >
                 Dashboard
               </Link>
             )}
-            <Link
-              to="/pedidos"
-              className={`nav-link ${isActive("/pedidos") ? "active text-info" : "text-white"}`}
-            >
-              Pedidos
-            </Link>
+            {rol !== "admin" && (
+              <Link
+                to="/pedidos"
+                className={`nav-link ${
+                  isActive("/pedidos") ? "active text-info" : "text-white"
+                }`}
+              >
+                Pedidos
+              </Link>
+            )}
             <Link
               to="/Products"
-              className={`nav-link ${isActive("/Products") ? "active text-info" : "text-white"}`}
+              className={`nav-link ${
+                isActive("/Products") ? "active text-info" : "text-white"
+              }`}
             >
               Catálogo
             </Link>
@@ -71,12 +93,14 @@ export default function Navbar() {
 
           {/* Íconos (carrito + usuario) */}
           <div className="d-flex gap-3 mt-3 mt-lg-0 align-items-center justify-content-end">
-            <FaShoppingCart
-              size={24}
-              className="icon-hover icon-white"
-              style={{ cursor: "pointer" }}
-              onClick={() => navigate("/carrito")}
-            />
+            {rol !== "admin" && (
+              <FaShoppingCart
+                size={24}
+                className="icon-hover icon-white"
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate("/carrito")}
+              />
+            )}
 
             <div className="position-relative">
               <FaUserCircle
@@ -120,6 +144,8 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+      {/* Animación de carga al cerrar sesión */}
+      {cargando && <LoadingOverlay />}
     </nav>
   );
 }

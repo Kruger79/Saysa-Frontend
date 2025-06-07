@@ -38,17 +38,18 @@ export default function Carrito() {
   };
 
   const calcularTotal = () => {
-    return carrito.reduce((total, item) => total + item.Precio * item.cantidad, 0);
+    return carrito.reduce(
+      (total, item) => total + item.Precio * item.cantidad,
+      0
+    );
   };
 
-
   const eliminarDelCarrito = (index) => {
-  const nuevoCarrito = [...carrito];
-  nuevoCarrito.splice(index, 1);
-  setCarrito(nuevoCarrito);
-  localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
-};
-
+    const nuevoCarrito = [...carrito];
+    nuevoCarrito.splice(index, 1);
+    setCarrito(nuevoCarrito);
+    localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
+  };
 
   const confirmarPedido = async () => {
     if (carrito.length === 0) {
@@ -61,7 +62,6 @@ export default function Carrito() {
       toast.warning("Debe iniciar sesión para confirmar el pedido.");
       return;
     }
-
 
     const productos = carrito.map((item) => ({
       idProducto: item.IdProducto,
@@ -87,11 +87,15 @@ export default function Carrito() {
 
       let mensaje = `Hola!, quisiera realizar un pedido con los siguientes productos:\n\n`;
       carrito.forEach((item) => {
-        mensaje += `${item.cantidad} x ${item.Nombre} - ₡${(item.Precio * item.cantidad).toLocaleString()}\n`;
+        mensaje += `${item.cantidad} x ${item.Nombre} - ₡${(
+          item.Precio * item.cantidad
+        ).toLocaleString()}\n`;
       });
       mensaje += `Cliente: ${usuario.Nombre}\n\n`;
       mensaje += `Costo de envío: ₡${precioEnvio.toLocaleString()}\n`;
-      mensaje += `Total final: ₡${(calcularTotal() + precioEnvio).toLocaleString()}`;
+      mensaje += `Total final: ₡${(
+        calcularTotal() + precioEnvio
+      ).toLocaleString()}`;
 
       const numero = "50689864016";
       const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
@@ -131,7 +135,12 @@ export default function Carrito() {
                         <img
                           src={item.ImagenUrl}
                           alt={item.Nombre}
-                          style={{ width: "80px", height: "80px", objectFit: "cover", borderRadius: "8px" }}
+                          style={{
+                            width: "80px",
+                            height: "80px",
+                            objectFit: "cover",
+                            borderRadius: "8px",
+                          }}
                         />
                       </td>
                       <td>{item.Nombre}</td>
@@ -140,7 +149,9 @@ export default function Carrito() {
                         <div className="d-flex justify-content-center align-items-center gap-2">
                           <button
                             className="btn btn-outline-secondary btn-sm"
-                            onClick={() => actualizarCantidad(index, item.cantidad - 1)}
+                            onClick={() =>
+                              actualizarCantidad(index, item.cantidad - 1)
+                            }
                             title="Disminuir"
                           >
                             −
@@ -151,14 +162,23 @@ export default function Carrito() {
                             max="100"
                             value={item.cantidad}
                             onChange={(e) =>
-                              actualizarCantidad(index, parseInt(e.target.value) || 1)
+                              actualizarCantidad(
+                                index,
+                                parseInt(e.target.value) || 1
+                              )
                             }
                             className="form-control"
-                            style={{ width: "70px", textAlign: "center", fontWeight: "bold" }}
+                            style={{
+                              width: "70px",
+                              textAlign: "center",
+                              fontWeight: "bold",
+                            }}
                           />
                           <button
                             className="btn btn-outline-secondary btn-sm"
-                            onClick={() => actualizarCantidad(index, item.cantidad + 1)}
+                            onClick={() =>
+                              actualizarCantidad(index, item.cantidad + 1)
+                            }
                             title="Aumentar"
                           >
                             +
@@ -211,13 +231,21 @@ export default function Carrito() {
               </select>
             </div>
 
-            <h5 className="text-end">Costo de envío: ₡{precioEnvio.toLocaleString()}</h5>
+            <h5 className="text-end">
+              Costo de envío: ₡{precioEnvio.toLocaleString()}
+            </h5>
             <h4 className="text-end mt-2">
-              Total: ₡{(calcularTotal() + (carrito.length > 0 ? precioEnvio : 0)).toLocaleString()}
+              Total: ₡
+              {(
+                calcularTotal() + (carrito.length > 0 ? precioEnvio : 0)
+              ).toLocaleString()}
             </h4>
 
             <div className="d-flex justify-content-center gap-3 mt-4">
-              <button onClick={vaciarCarrito} className="btn btn-outline-danger">
+              <button
+                onClick={vaciarCarrito}
+                className="btn btn-outline-danger"
+              >
                 Vaciar carrito
               </button>
               <button onClick={confirmarPedido} className="btn btn-success">

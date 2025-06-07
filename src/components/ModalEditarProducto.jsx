@@ -3,7 +3,12 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { actualizarProducto } from "../api/productos";
 import { toast } from "react-toastify";
 
-const ModalEditarProducto = ({ show, handleClose, producto, onProductoActualizado }) => {
+const ModalEditarProducto = ({
+  show,
+  handleClose,
+  producto,
+  onProductoActualizado,
+}) => {
   const [formData, setFormData] = useState({
     Nombre: "",
     Descripcion: "",
