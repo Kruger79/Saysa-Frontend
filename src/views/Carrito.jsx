@@ -214,23 +214,6 @@ export default function Carrito() {
               />
             </div>
 
-            <div className="mb-4">
-              <label htmlFor="tiempoEntrega" className="form-label">
-                Tiempo estimado de entrega:
-              </label>
-              <select
-                id="tiempoEntrega"
-                className="form-select"
-                value={tiempoEntrega}
-                onChange={(e) => setTiempoEntrega(e.target.value)}
-              >
-                <option value="5 días">5 días</option>
-                <option value="1 semana">1 semana</option>
-                <option value="2 semanas">2 semanas</option>
-                <option value="3 semanas">3 semanas</option>
-              </select>
-            </div>
-
             <h5 className="text-end">
               Costo de envío: ₡{precioEnvio.toLocaleString()}
             </h5>
