@@ -9,6 +9,7 @@ import Usuarios from "../views/Usuarios";
 import Carrito from "../views/Carrito";
 import Cotizaciones from "../views/Cotizaciones";
 import AdminProductoCRUD from "../views/AdminProductoCRUD";
+import PrivateRoute from "../components/PrivateRoute";
 
 export default function AppRouter() {
   return (
@@ -17,13 +18,42 @@ export default function AppRouter() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/admin/usuarios" element={<Usuarios />} />
         <Route path="/carrito" element={<Carrito />} />
         <Route path="/pedidos" element={<Cotizaciones />} />
-        <Route path="/admin/productos" element={<AdminProductoCRUD />} />
+         <Route
+          path="/admin"
+          element={
+            <PrivateRoute requireAdmin>
+              <AdminDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/usuarios"
+          element={
+            <PrivateRoute requireAdmin>
+              <Usuarios />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/productos"
+          element={
+            <PrivateRoute requireAdmin>
+              <AdminProductoCRUD />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/perfil"
+          element={
+            <PrivateRoute>
+              <Perfil />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
