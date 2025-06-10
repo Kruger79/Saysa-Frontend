@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NavbarAdmin from "../components/Navbar";
 import "../../public/css/Usuarios.css";
-import { FaUserPlus, FaEdit } from "react-icons/fa";
+import { FaUserPlus, FaEdit, FaSearch } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { obtenerUsuarios, actualizarRolUsuario } from "../api/usuarios";
 import SidebarAdmin from "../components/SidebarAdmin";
@@ -9,11 +9,29 @@ import ReactPaginate from "react-paginate";
 import "../../public/css/ReactPaginate.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
+function resaltarCoincidencia(texto, termino) {
+  if (!termino) return texto;
+
+  const regex = new RegExp(`(${termino})`, "gi");
+  const partes = texto.split(regex);
+
+  return partes.map((parte, i) =>
+    parte.toLowerCase() === termino.toLowerCase() ? (
+      <span key={i} style={{ backgroundColor: "#ffff00" }}>{parte}</span>
+    ) : (
+      parte
+    )
+  );
+}
+
+
 export default function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [editandoPedidoId, seteditandoPedidoId] = useState(null);
   const [paginaActual, setPaginaActual] = useState(0);
   const itemsPorPagina = 6;
+  const [busqueda, setBusqueda] = useState("");
+
 
   useEffect(() => {
     async function cargarUsuarios() {
@@ -28,6 +46,13 @@ export default function Usuarios() {
 
     cargarUsuarios();
   }, []);
+
+  const usuariosFiltrados = usuarios.filter((usuario) =>
+  [usuario.Nombre, usuario.Correo, usuario.Cedula]
+    .join(" ")
+    .toLowerCase()
+    .includes(busqueda.toLowerCase())
+  );
 
   const manejarCambioRol = async (IdUsuario, nuevoRol) => {
     try {
@@ -55,14 +80,16 @@ export default function Usuarios() {
   };
 
   const offset = paginaActual * itemsPorPagina;
-  const usuariosPaginados = usuarios.slice(offset, offset + itemsPorPagina);
-  const totalPaginas = Math.ceil(usuarios.length / itemsPorPagina);
+  const usuariosPaginados = usuariosFiltrados.slice(offset, offset + itemsPorPagina);
+  const totalPaginas = Math.ceil(usuariosFiltrados.length / itemsPorPagina);
 
   const handlePageClick = ({ selected }) => {
     setPaginaActual(selected);
   };
 
   return (
+
+    
     <div className="usuarios-page">
       <NavbarAdmin />
       <SidebarAdmin />
@@ -70,6 +97,21 @@ export default function Usuarios() {
         <div className="usuarios-header">
           <h1>Usuarios Registrados</h1>
         </div>
+
+        <div className="usuarios-busqueda">
+  <div className="usuarios-busqueda-container">
+    <FaSearch className="usuarios-busqueda-icono" />
+    <input
+      type="text"
+      placeholder="Buscar por nombre, correo o cédula"
+      value={busqueda}
+      onChange={(e) => {
+        setBusqueda(e.target.value);
+        setPaginaActual(0);
+      }}
+    />
+  </div>
+</div>
 
         <table className="usuarios-table">
           <thead>
@@ -85,9 +127,9 @@ export default function Usuarios() {
           <tbody>
             {usuariosPaginados.map((usuario) => (
               <tr key={usuario.IdUsuario}>
-                <td>{usuario.Nombre}</td>
-                <td>{usuario.Correo}</td>
-                <td>{usuario.Cedula}</td>
+               <td>{resaltarCoincidencia(usuario.Nombre, busqueda)}</td>
+<td>{resaltarCoincidencia(usuario.Correo, busqueda)}</td>
+<td>{resaltarCoincidencia(usuario.Cedula, busqueda)}</td>
                 <td>{usuario.Telefono}</td>
                 <td>
                   {editandoPedidoId === usuario.IdUsuario ? (
@@ -122,7 +164,7 @@ export default function Usuarios() {
           </tbody>
         </table>
 
-        {/* ✅ Paginación */}
+        {/*Paginación */}
         <ReactPaginate
           previousLabel={
             <span className="d-flex align-items-center gap-2 text-success">
