@@ -22,7 +22,7 @@ export default function AdminDashboard() {
   const [editandoPedidoId, setEditandoPedidoId] = useState(null);
   const [estadosTemporales, setEstadosTemporales] = useState({});
   const [busqueda, setBusqueda] = useState("");
-  const [filtroEstado, setFiltroEstado] = useState("todos"); // Nuevo estado para el filtro
+  const [filtroEstado, setFiltroEstado] = useState("pendiente"); // Cambia "todos" por "pendiente"
   const [paginaActual, setPaginaActual] = useState(0); // react-paginate empieza desde 0
   const itemsPorPagina = 6;
 
