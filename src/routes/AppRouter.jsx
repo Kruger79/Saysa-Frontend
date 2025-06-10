@@ -22,7 +22,7 @@ export default function AppRouter() {
         <Route path="/products" element={<Products />} />
         <Route path="/carrito" element={<Carrito />} />
         <Route path="/pedidos" element={<Cotizaciones />} />
-         <Route
+        <Route
           path="/admin"
           element={
             <PrivateRoute requireAdmin>

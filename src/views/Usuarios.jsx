@@ -17,13 +17,14 @@ function resaltarCoincidencia(texto, termino) {
 
   return partes.map((parte, i) =>
     parte.toLowerCase() === termino.toLowerCase() ? (
-      <span key={i} style={{ backgroundColor: "#ffff00" }}>{parte}</span>
+      <span key={i} style={{ backgroundColor: "#ffff00" }}>
+        {parte}
+      </span>
     ) : (
       parte
     )
   );
 }
-
 
 export default function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
@@ -31,7 +32,6 @@ export default function Usuarios() {
   const [paginaActual, setPaginaActual] = useState(0);
   const itemsPorPagina = 6;
   const [busqueda, setBusqueda] = useState("");
-
 
   useEffect(() => {
     async function cargarUsuarios() {
@@ -48,10 +48,10 @@ export default function Usuarios() {
   }, []);
 
   const usuariosFiltrados = usuarios.filter((usuario) =>
-  [usuario.Nombre, usuario.Correo, usuario.Cedula]
-    .join(" ")
-    .toLowerCase()
-    .includes(busqueda.toLowerCase())
+    [usuario.Nombre, usuario.Correo, usuario.Cedula]
+      .join(" ")
+      .toLowerCase()
+      .includes(busqueda.toLowerCase())
   );
 
   const manejarCambioRol = async (IdUsuario, nuevoRol) => {
@@ -80,7 +80,10 @@ export default function Usuarios() {
   };
 
   const offset = paginaActual * itemsPorPagina;
-  const usuariosPaginados = usuariosFiltrados.slice(offset, offset + itemsPorPagina);
+  const usuariosPaginados = usuariosFiltrados.slice(
+    offset,
+    offset + itemsPorPagina
+  );
   const totalPaginas = Math.ceil(usuariosFiltrados.length / itemsPorPagina);
 
   const handlePageClick = ({ selected }) => {
@@ -88,8 +91,6 @@ export default function Usuarios() {
   };
 
   return (
-
-    
     <div className="usuarios-page">
       <NavbarAdmin />
       <SidebarAdmin />
@@ -99,19 +100,19 @@ export default function Usuarios() {
         </div>
 
         <div className="usuarios-busqueda">
-  <div className="usuarios-busqueda-container">
-    <FaSearch className="usuarios-busqueda-icono" />
-    <input
-      type="text"
-      placeholder="Buscar por nombre, correo o cédula"
-      value={busqueda}
-      onChange={(e) => {
-        setBusqueda(e.target.value);
-        setPaginaActual(0);
-      }}
-    />
-  </div>
-</div>
+          <div className="usuarios-busqueda-container">
+            <FaSearch className="usuarios-busqueda-icono" />
+            <input
+              type="text"
+              placeholder="Buscar por nombre, correo o cédula"
+              value={busqueda}
+              onChange={(e) => {
+                setBusqueda(e.target.value);
+                setPaginaActual(0);
+              }}
+            />
+          </div>
+        </div>
 
         <table className="usuarios-table">
           <thead>
@@ -127,9 +128,9 @@ export default function Usuarios() {
           <tbody>
             {usuariosPaginados.map((usuario) => (
               <tr key={usuario.IdUsuario}>
-               <td>{resaltarCoincidencia(usuario.Nombre, busqueda)}</td>
-<td>{resaltarCoincidencia(usuario.Correo, busqueda)}</td>
-<td>{resaltarCoincidencia(usuario.Cedula, busqueda)}</td>
+                <td>{resaltarCoincidencia(usuario.Nombre, busqueda)}</td>
+                <td>{resaltarCoincidencia(usuario.Correo, busqueda)}</td>
+                <td>{resaltarCoincidencia(usuario.Cedula, busqueda)}</td>
                 <td>{usuario.Telefono}</td>
                 <td>
                   {editandoPedidoId === usuario.IdUsuario ? (

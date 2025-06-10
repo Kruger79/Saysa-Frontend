@@ -121,3 +121,47 @@
   border-radius: 8px;
   font-size: 0.95rem;
 }
+
+.usuarios-busqueda {
+  width: 100%;
+  max-width: 1200px; /* Igual que la tabla */
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.usuarios-busqueda-container {
+  position: relative;
+  width: 100%;
+}
+
+.usuarios-busqueda input {
+  width: 100%;
+  padding: 10px 12px 10px 40px; /* Espacio para el icono */
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.usuarios-busqueda input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.usuarios-busqueda-icono {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #16a34a; /* Verde principal */
+  font-size: 1.1rem;
+  pointer-events: none;
+  transition: color 0.3s;
+}
+
+.usuarios-busqueda-container:focus-within .usuarios-busqueda-icono {
+  color: #22c55e; /* Verde más vibrante al enfocar */
+}
