@@ -9,12 +9,14 @@ import {
   FaCheck,
   FaArrowLeft,
   FaArrowRight,
+  FaTimes,
 } from "react-icons/fa";
 import NavbarAdmin from "../components/Navbar";
 import { useLocation, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import ReactPaginate from "react-paginate";
 import "../../public/css/ReactPaginate.css";
+import { Table } from "react-bootstrap";
 
 export default function AdminDashboard() {
   const location = useLocation();
@@ -25,6 +27,7 @@ export default function AdminDashboard() {
   const [filtroEstado, setFiltroEstado] = useState("todos"); // Nuevo estado para el filtro
   const [paginaActual, setPaginaActual] = useState(0); // react-paginate empieza desde 0
   const itemsPorPagina = 6;
+  const [sidebarAbierto, setSidebarAbierto] = useState(true);
 
   useEffect(() => {
     async function fetchPedidos() {
@@ -98,9 +101,18 @@ export default function AdminDashboard() {
 
   return (
     <div className="admin-dashboard">
+      <button
+        className={`sidebar-toggle ${sidebarAbierto ? "abierto" : ""}`}
+        onClick={() => setSidebarAbierto(!sidebarAbierto)}
+      >
+        {sidebarAbierto ? <FaTimes /> : <FaArrowRight />}
+      </button>
+
       <NavbarAdmin />
       <div className="admin-body">
-        <aside className="admin-sidebar">
+        <aside
+          className={`admin-sidebar ${sidebarAbierto ? "abierto" : "cerrado"}`}
+        >
           <ul className="sidebar-menu">
             <li>
               <Link
@@ -109,7 +121,8 @@ export default function AdminDashboard() {
                   isActive("/admin") ? "active-link" : ""
                 }`}
               >
-                <FaTachometerAlt /> Dashboard
+                <FaTachometerAlt />
+                <span className="link-text">Dashboard</span>
               </Link>
             </li>
             <li>
@@ -119,7 +132,8 @@ export default function AdminDashboard() {
                   isActive("/admin/usuarios") ? "active-link" : ""
                 }`}
               >
-                <FaUsers /> Usuarios
+                <FaUsers />
+                <span className="link-text">Usuarios</span>
               </Link>
             </li>
             <li>
@@ -129,13 +143,18 @@ export default function AdminDashboard() {
                   isActive("/admin/productos") ? "active-link" : ""
                 }`}
               >
-                <FaBoxOpen /> Productos
+                <FaBoxOpen />
+                <span className="link-text">Productos</span>
               </Link>
             </li>
           </ul>
         </aside>
 
-        <main className="admin-container">
+        <main
+          className={`admin-container ${
+            sidebarAbierto ? "margen-abierto" : "margen-cerrado"
+          }`}
+        >
           <h1 className="admin-title">Vista de administrador</h1>
 
           <div className="admin-stats">
@@ -235,108 +254,109 @@ export default function AdminDashboard() {
           </div>
 
           <h2 className="section-title">Pedidos recientes</h2>
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Pedido</th>
-                <th>Fecha</th>
-                <th>Cliente</th>
-                <th>Cédula</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pedidosPaginados.map((pedido) => (
-                <tr key={pedido.IdPedido}>
-                  <td>{pedido.IdPedido}</td>
-                  <td>{formatearFecha(pedido.FechaPedido)}</td>
-                  <td>{pedido.NombreCliente}</td>
-                  <td>{pedido.Cedula}</td>
-                  <td>
-                    {pedido.IdCotizacion ? (
-                      ["Aceptada", "Rechazada"].includes(pedido.Estado) ? (
-                        <span
-                          className={`rol-badge ${pedido.Estado.toLowerCase()}`}
-                        >
-                          {pedido.Estado}
-                        </span>
-                      ) : editandoPedidoId === pedido.IdPedido ? (
-                        <select
-                          value={
-                            estadosTemporales[pedido.IdPedido] ||
-                            pedido.Estado ||
-                            "Pendiente"
-                          }
-                          onChange={(e) =>
-                            setEstadosTemporales((prev) => ({
-                              ...prev,
-                              [pedido.IdPedido]: e.target.value,
-                            }))
-                          }
-                          className="rol-select"
-                        >
-                          <option value="Pendiente">Pendiente</option>
-                          <option value="Enviada">Enviada</option>
-                          <option value="Aceptada">Aceptada</option>
-                          <option value="Rechazada">Rechazada</option>
-                        </select>
-                      ) : (
-                        <span
-                          className={`rol-badge ${
-                            pedido.Estado?.toLowerCase() || "pendiente"
-                          }`}
-                        >
-                          {pedido.Estado || "Pendiente"}
-                        </span>
-                      )
-                    ) : (
-                      <span className="rol-badge sin-estado">Sin estado</span>
-                    )}
-                  </td>
-                  <td>
-                    {pedido.IdCotizacion ? (
-                      ["Aceptada", "Rechazada"].includes(pedido.Estado) ? (
-                        <span className="text-muted">—</span>
-                      ) : editandoPedidoId === pedido.IdPedido ? (
-                        <button
-                          className="btn btn-success"
-                          onClick={async () => {
-                            const nuevoEstado =
-                              estadosTemporales[pedido.IdPedido] ||
-                              pedido.Estado;
-                            await actualizarEstadoCotizacion(
-                              pedido.IdCotizacion,
-                              nuevoEstado
-                            );
-                            setEditandoPedidoId(null);
-                          }}
-                        >
-                          <FaCheck />
-                        </button>
-                      ) : (
-                        <button
-                          className="btn btn-primary"
-                          onClick={() => {
-                            setEditandoPedidoId(pedido.IdPedido);
-                            setEstadosTemporales((prev) => ({
-                              ...prev,
-                              [pedido.IdPedido]: pedido.Estado || "Pendiente",
-                            }));
-                          }}
-                        >
-                          <FaEdit />
-                        </button>
-                      )
-                    ) : (
-                      <span className="text-muted">—</span>
-                    )}
-                  </td>
+          
+            <Table bordered hover className="admin-table mb-0">
+              <thead>
+                <tr>
+                  <th>Pedido</th>
+                  <th>Fecha</th>
+                  <th>Cliente</th>
+                  <th>Cédula</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-
+              </thead>
+              <tbody>
+                {pedidosPaginados.map((pedido) => (
+                  <tr key={pedido.IdPedido}>
+                    <td>{pedido.IdPedido}</td>
+                    <td>{formatearFecha(pedido.FechaPedido)}</td>
+                    <td>{pedido.NombreCliente}</td>
+                    <td>{pedido.Cedula}</td>
+                    <td>
+                      {pedido.IdCotizacion ? (
+                        ["Aceptada", "Rechazada"].includes(pedido.Estado) ? (
+                          <span
+                            className={`rol-badge ${pedido.Estado.toLowerCase()}`}
+                          >
+                            {pedido.Estado}
+                          </span>
+                        ) : editandoPedidoId === pedido.IdPedido ? (
+                          <select
+                            value={
+                              estadosTemporales[pedido.IdPedido] ||
+                              pedido.Estado ||
+                              "Pendiente"
+                            }
+                            onChange={(e) =>
+                              setEstadosTemporales((prev) => ({
+                                ...prev,
+                                [pedido.IdPedido]: e.target.value,
+                              }))
+                            }
+                            className="rol-select"
+                          >
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Enviada">Enviada</option>
+                            <option value="Aceptada">Aceptada</option>
+                            <option value="Rechazada">Rechazada</option>
+                          </select>
+                        ) : (
+                          <span
+                            className={`rol-badge ${
+                              pedido.Estado?.toLowerCase() || "pendiente"
+                            }`}
+                          >
+                            {pedido.Estado || "Pendiente"}
+                          </span>
+                        )
+                      ) : (
+                        <span className="rol-badge sin-estado">Sin estado</span>
+                      )}
+                    </td>
+                    <td>
+                      {pedido.IdCotizacion ? (
+                        ["Aceptada", "Rechazada"].includes(pedido.Estado) ? (
+                          <span className="text-muted">—</span>
+                        ) : editandoPedidoId === pedido.IdPedido ? (
+                          <button
+                            className="btn btn-success"
+                            onClick={async () => {
+                              const nuevoEstado =
+                                estadosTemporales[pedido.IdPedido] ||
+                                pedido.Estado;
+                              await actualizarEstadoCotizacion(
+                                pedido.IdCotizacion,
+                                nuevoEstado
+                              );
+                              setEditandoPedidoId(null);
+                            }}
+                          >
+                            <FaCheck />
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-primary"
+                            onClick={() => {
+                              setEditandoPedidoId(pedido.IdPedido);
+                              setEstadosTemporales((prev) => ({
+                                ...prev,
+                                [pedido.IdPedido]: pedido.Estado || "Pendiente",
+                              }));
+                            }}
+                          >
+                            <FaEdit />
+                          </button>
+                        )
+                      ) : (
+                        <span className="text-muted">—</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          
           {/* ✅ PAGINACIÓN */}
           <ReactPaginate
             previousLabel={
