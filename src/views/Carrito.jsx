@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { obtenerPrecioEnvio } from "../api/configuracion";
 import Navbar from "../components/Navbar";
 import { toast } from "react-toastify";
+import "../../public/css/Carrito.css"; 
 
 export default function Carrito() {
   const [carrito, setCarrito] = useState([]);
@@ -116,7 +117,8 @@ export default function Carrito() {
           <p className="text-center">No hay productos en el carrito.</p>
         ) : (
           <>
-            <div className="carrito-table-container">
+            {/* Vista de tabla para escritorio */}
+            <div className="table-responsive d-none d-md-block carrito-table-container">
               <table className="table table-bordered text-center align-middle carrito-table">
                 <thead className="table-light">
                   <tr>
@@ -125,7 +127,7 @@ export default function Carrito() {
                     <th>Precio</th>
                     <th>Cantidad</th>
                     <th>Subtotal</th>
-                    <th></th> {/* Nueva columna vacía para el botón eliminar */}
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -135,12 +137,7 @@ export default function Carrito() {
                         <img
                           src={item.ImagenUrl}
                           alt={item.Nombre}
-                          style={{
-                            width: "80px",
-                            height: "80px",
-                            objectFit: "cover",
-                            borderRadius: "8px",
-                          }}
+                          className="carrito-img img-fluid"
                         />
                       </td>
                       <td>{item.Nombre}</td>
@@ -149,9 +146,7 @@ export default function Carrito() {
                         <div className="d-flex justify-content-center align-items-center gap-2">
                           <button
                             className="btn btn-outline-secondary btn-sm"
-                            onClick={() =>
-                              actualizarCantidad(index, item.cantidad - 1)
-                            }
+                            onClick={() => actualizarCantidad(index, item.cantidad - 1)}
                             title="Disminuir"
                           >
                             −
@@ -162,23 +157,14 @@ export default function Carrito() {
                             max="100"
                             value={item.cantidad}
                             onChange={(e) =>
-                              actualizarCantidad(
-                                index,
-                                parseInt(e.target.value) || 1
-                              )
+                              actualizarCantidad(index, parseInt(e.target.value) || 1)
                             }
                             className="form-control"
-                            style={{
-                              width: "70px",
-                              textAlign: "center",
-                              fontWeight: "bold",
-                            }}
+                            style={{ width: "70px", textAlign: "center", fontWeight: "bold" }}
                           />
                           <button
                             className="btn btn-outline-secondary btn-sm"
-                            onClick={() =>
-                              actualizarCantidad(index, item.cantidad + 1)
-                            }
+                            onClick={() => actualizarCantidad(index, item.cantidad + 1)}
                             title="Aumentar"
                           >
                             +
@@ -201,6 +187,71 @@ export default function Carrito() {
               </table>
             </div>
 
+            {/* Vista tipo tarjeta para móviles */}
+            <div className="d-block d-md-none">
+              {carrito.map((item, index) => (
+                <div key={index} className="card mb-3 shadow-sm">
+                  <div className="row g-0 align-items-center">
+                    <div className="col-4 text-center">
+                      <img
+                        src={item.ImagenUrl}
+                        alt={item.Nombre}
+                        className="img-fluid carrito-img rounded-start p-2"
+                      />
+                    </div>
+                    <div className="col-8">
+                      <div className="card-body py-2">
+                        <h6 className="card-title">{item.Nombre}</h6>
+                        <p className="mb-1">₡{item.Precio}</p>
+                        <div className="d-flex justify-content-between align-items-center mb-1">
+                          <small className="text-muted">Cantidad:</small>
+                          <div className="d-flex gap-1">
+                            <button
+                              className="btn btn-outline-secondary btn-sm"
+                              onClick={() => actualizarCantidad(index, item.cantidad - 1)}
+                            >
+                              −
+                            </button>
+                            <input
+                              type="number"
+                              min="1"
+                              max="100"
+                              value={item.cantidad}
+                              onChange={(e) =>
+                                actualizarCantidad(index, parseInt(e.target.value) || 1)
+                              }
+                              className="form-control text-center fw-bold"
+                              style={{ width: "60px" }}
+                            />
+                            <button
+                              className="btn btn-outline-secondary btn-sm"
+                              onClick={() => actualizarCantidad(index, item.cantidad + 1)}
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                        <div className="d-flex justify-content-between align-items-center">
+                          <small className="text-muted">Subtotal:</small>
+                          <span className="fw-bold">
+                            ₡{(item.Precio * item.cantidad).toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="text-end mt-2">
+                          <button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => eliminarDelCarrito(index)}
+                          >
+                            🗑️ Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <div className="mb-4">
               <label htmlFor="finca" className="form-label">
                 Nombre de la finca (opcional):
@@ -219,9 +270,7 @@ export default function Carrito() {
             </h5>
             <h4 className="text-end mt-2">
               Total: ₡
-              {(
-                calcularTotal() + (carrito.length > 0 ? precioEnvio : 0)
-              ).toLocaleString()}
+              {(calcularTotal() + (carrito.length > 0 ? precioEnvio : 0)).toLocaleString()}
             </h4>
 
             <div className="d-flex justify-content-center gap-3 mt-4">
