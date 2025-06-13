@@ -31,7 +31,7 @@ export default function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [editandoPedidoId, seteditandoPedidoId] = useState(null);
   const [paginaActual, setPaginaActual] = useState(0);
-  const itemsPorPagina = 3;
+  const itemsPorPagina = 10;
   const [busqueda, setBusqueda] = useState("");
   const [cargandoPagina, setCargandoPagina] = useState(false);
   
