@@ -22,6 +22,7 @@ export default function Navbar() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [cargando, setCargando] = useState(false);
+  const [cantidadCarrito, setCantidadCarrito] = useState(0);
 
   const adminMenuRef = useRef(null);
   const userMenuRef = useRef(null);
@@ -77,6 +78,21 @@ export default function Navbar() {
     setShowAdminMenu(false);
     setShowUserMenu(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    const actualizarCantidad = () => {
+      const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+      const total = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+      setCantidadCarrito(total);
+    };
+    actualizarCantidad();
+    window.addEventListener("storage", actualizarCantidad);
+    window.addEventListener("carritoActualizado", actualizarCantidad);
+    return () => {
+      window.removeEventListener("storage", actualizarCantidad);
+      window.removeEventListener("carritoActualizado", actualizarCantidad);
+    };
+  }, []);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm px-3">
@@ -211,12 +227,17 @@ export default function Navbar() {
 
           <div className="d-flex gap-3 mt-3 mt-lg-0 align-items-center justify-content-end">
             {rol !== "admin" && (
-              <FaShoppingCart
-                size={24}
-                className="icon-hover icon-white"
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate("/carrito")}
-              />
+              <div className="position-relative" style={{ cursor: "pointer" }} onClick={() => navigate("/carrito")}> 
+                <FaShoppingCart size={24} className="icon-hover icon-white" />
+                {cantidadCarrito > 0 && (
+                  <span
+                    className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark"
+                    style={{ fontSize: "0.7rem" }}
+                  >
+                    {cantidadCarrito}
+                  </span>
+                )}
+              </div>
             )}
 
             <div className="position-relative" ref={userMenuRef}>

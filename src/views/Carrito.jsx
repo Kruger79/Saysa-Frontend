@@ -28,6 +28,7 @@ export default function Carrito() {
   const vaciarCarrito = () => {
     localStorage.removeItem("carrito");
     setCarrito([]);
+    window.dispatchEvent(new Event("carritoActualizado"));
   };
 
   const actualizarCantidad = (index, nuevaCantidad) => {
@@ -36,6 +37,7 @@ export default function Carrito() {
     nuevoCarrito[index].cantidad = nuevaCantidad;
     setCarrito(nuevoCarrito);
     localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
+    window.dispatchEvent(new Event("carritoActualizado"));
   };
 
   const calcularTotal = () => {
@@ -50,6 +52,7 @@ export default function Carrito() {
     nuevoCarrito.splice(index, 1);
     setCarrito(nuevoCarrito);
     localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
+    window.dispatchEvent(new Event("carritoActualizado"));
   };
 
   const confirmarPedido = async () => {
@@ -117,7 +120,6 @@ export default function Carrito() {
           <p className="text-center">No hay productos en el carrito.</p>
         ) : (
           <>
-            {/* Vista de tabla para escritorio */}
             <div className="table-responsive d-none d-md-block carrito-table-container">
               <table className="table table-bordered text-center align-middle carrito-table">
                 <thead className="table-light">
@@ -187,7 +189,6 @@ export default function Carrito() {
               </table>
             </div>
 
-            {/* Vista tipo tarjeta para móviles */}
             <div className="d-block d-md-none">
               {carrito.map((item, index) => (
                 <div key={index} className="card mb-3 shadow-sm">

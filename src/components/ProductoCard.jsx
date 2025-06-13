@@ -1,5 +1,6 @@
 import "../../public/css/ProductoCard.css";
 import { toast } from "react-toastify";
+
 export default function ProductoCard({ producto, reverse }) {
   const agregarAlCarrito = () => {
     let carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
@@ -18,6 +19,10 @@ export default function ProductoCard({ producto, reverse }) {
     }
 
     localStorage.setItem("carrito", JSON.stringify(carritoActual));
+
+    // 🔔 Notifica al Navbar que el carrito fue actualizado
+    window.dispatchEvent(new Event("carritoActualizado"));
+
     toast.success("Producto agregado al carrito");
   };
 
