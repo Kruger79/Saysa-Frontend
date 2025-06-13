@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import "../../public/css/Cotizaciones.css";
+import PinaLoader from "../components/PinaLoader";
+import ReactPaginate from "react-paginate";
+import "../../public/css/ReactPaginate.css";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 export default function Cotizaciones() {
+  const [paginaActual, setPaginaActual] = useState(0);
+  const itemsPorPagina = 10;
+  const [cargandoPagina, setCargandoPagina] = useState(false);
   const [cotizaciones, setCotizaciones] = useState([]);
 
   useEffect(() => {
@@ -35,6 +42,26 @@ export default function Cotizaciones() {
 
   const usuario = JSON.parse(localStorage.getItem("usuario"));
 
+  const offset = paginaActual * itemsPorPagina;
+  const cotizacionesPaginadas = cotizaciones.slice(
+    offset,
+    offset + itemsPorPagina
+  );
+  const totalPaginas = Math.ceil(cotizaciones.length / itemsPorPagina);
+
+  const handlePageClick = ({ selected }) => {
+    setCargandoPagina(true);
+
+    setTimeout(() => {
+      setPaginaActual(selected); // ✅ se actualiza después de la animación
+      setCargandoPagina(false);
+    }, 1500); // puedes ajustar el tiempo según lo que dure tu piña
+  };
+
+  if (cargandoPagina) {
+    return <PinaLoader />;
+  }
+
   return (
     <div>
       <Navbar />
@@ -65,7 +92,7 @@ export default function Cotizaciones() {
                 </tr>
               </thead>
               <tbody>
-                {cotizaciones.map((coti) => (
+                {cotizacionesPaginadas.map((coti) => (
                   <tr key={coti.IdCotizacion}>
                     <td>{coti.IdCotizacion}</td>
                     <td>
@@ -79,6 +106,33 @@ export default function Cotizaciones() {
             </table>
           </div>
         )}
+
+        {/* 📄 Paginación */}
+        <ReactPaginate
+          previousLabel={
+            <span className="d-flex align-items-center gap-2 text-success">
+              <FaArrowLeft />
+              <span className="texto-paginacion">Anterior</span>
+            </span>
+          }
+          nextLabel={
+            <span className="d-flex align-items-center gap-2 text-success">
+              <span className="texto-paginacion">Siguiente</span>
+              <FaArrowRight />
+            </span>
+          }
+          breakLabel={"..."}
+          pageCount={totalPaginas}
+          onPageChange={handlePageClick}
+          forcePage={paginaActual}
+          containerClassName={"paginacion"}
+          pageClassName={"pagina"}
+          pageLinkClassName={"pagina-link"}
+          activeClassName={"activa"}
+          previousClassName={"pagina"}
+          nextClassName={"pagina"}
+          disabledClassName={"deshabilitada"}
+        />
       </div>
     </div>
   );

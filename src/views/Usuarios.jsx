@@ -9,7 +9,6 @@ import "../../public/css/ReactPaginate.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import PinaLoader from "../components/PinaLoader";
 
-
 function resaltarCoincidencia(texto, termino) {
   if (!termino) return texto;
 
@@ -34,7 +33,6 @@ export default function Usuarios() {
   const itemsPorPagina = 10;
   const [busqueda, setBusqueda] = useState("");
   const [cargandoPagina, setCargandoPagina] = useState(false);
-  
 
   useEffect(() => {
     async function cargarUsuarios() {
@@ -90,17 +88,17 @@ export default function Usuarios() {
   const totalPaginas = Math.ceil(usuariosFiltrados.length / itemsPorPagina);
 
   const handlePageClick = ({ selected }) => {
-  setCargandoPagina(true);
+    setCargandoPagina(true);
 
-  setTimeout(() => {
-    setPaginaActual(selected); // ✅ se actualiza después de la animación
-    setCargandoPagina(false);
-  }, 1500); // puedes ajustar el tiempo según lo que dure tu piña
-};
+    setTimeout(() => {
+      setPaginaActual(selected); // ✅ se actualiza después de la animación
+      setCargandoPagina(false);
+    }, 1500); // puedes ajustar el tiempo según lo que dure tu piña
+  };
 
-if (cargandoPagina) {
-  return <PinaLoader />;
-}
+  if (cargandoPagina) {
+    return <PinaLoader />;
+  }
 
   return (
     <div className="usuarios-page">
