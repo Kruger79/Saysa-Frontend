@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { obtenerProductos } from "../api/productos";
 import { toast } from "react-toastify";
 import NavbarAdmin from "../components/Navbar";
-import SidebarAdmin from "../components/SidebarAdmin";
 import { Button, Table } from "react-bootstrap";
 import {
   FaPlus,
@@ -32,7 +31,7 @@ const AdminProductoCRUD = () => {
   const [precioEnvio, setPrecioEnvio] = useState(0);
   const [nuevoPrecioEnvio, setNuevoPrecioEnvio] = useState("");
   const [paginaActual, setPaginaActual] = useState(0);
-  const itemsPorPagina = 5;
+  const itemsPorPagina = 2;
 
   const cargarProductos = async () => {
     try {
@@ -99,8 +98,6 @@ const AdminProductoCRUD = () => {
   return (
     <div className="admin-productos-page">
       <NavbarAdmin />
-      <SidebarAdmin />
-
       <div className="admin-productos-container">
         <div className="admin-productos-header mt-5">
           <h2>Gestión de Productos</h2>
@@ -136,72 +133,108 @@ const AdminProductoCRUD = () => {
             value={busqueda}
             onChange={(e) => {
               setBusqueda(e.target.value);
-              setPaginaActual(0); // Reiniciar a la página 0 si hay búsqueda nueva
+              setPaginaActual(0);
             }}
           />
         </div>
 
-        {/* 🧾 Tabla */}
-        <Table
-          striped
-          bordered
-          hover
-          responsive
-          className="admin-productos-table"
-        >
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Descripción</th>
-              <th>Precio</th>
-              <th>Imagen</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {productosPaginados.map((producto) => (
-              <tr key={producto.IdProducto}>
-                <td>{producto.Nombre}</td>
-                <td>{producto.Descripcion}</td>
-                <td>₡{producto.Precio}</td>
-                <td>
-                  <img
-                    src={producto.ImagenUrl}
-                    alt={producto.Nombre}
-                    style={{ width: "80px", borderRadius: "5px" }}
-                  />
-                </td>
-                <td>
-                  <div className="d-flex gap-2 justify-content-center">
-                    <Button
-                      variant="primary"
-                      onClick={() => abrirModalEditar(producto)}
-                    >
-                      <FaEdit />
-                    </Button>
-                    <Button
-                      variant="danger"
-                      onClick={() => abrirModalEliminar(producto)}
-                    >
-                      <FaTrash />
-                    </Button>
-                  </div>
-                </td>
+        {/* Tabla para pantallas grandes */}
+        <div className="d-none d-md-block">
+          <Table
+            striped
+            bordered
+            hover
+            responsive
+            className="admin-productos-table"
+          >
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Imagen</th>
+                <th>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {productosPaginados.map((producto) => (
+                <tr key={producto.IdProducto}>
+                  <td>{producto.Nombre}</td>
+                  <td>{producto.Descripcion}</td>
+                  <td>₡{producto.Precio}</td>
+                  <td>
+                    <img
+                      src={producto.ImagenUrl}
+                      alt={producto.Nombre}
+                      style={{ width: "80px", borderRadius: "5px" }}
+                    />
+                  </td>
+                  <td>
+                    <div className="d-flex gap-2 justify-content-center">
+                      <Button
+                        variant="primary"
+                        onClick={() => abrirModalEditar(producto)}
+                      >
+                        <FaEdit />
+                      </Button>
+                      <Button
+                        variant="danger"
+                        onClick={() => abrirModalEliminar(producto)}
+                      >
+                        <FaTrash />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+
+        {/* 🪪 Tarjetas para pantallas móviles */}
+        <div className="producto-card-list d-md-none mt-3">
+          {productosPaginados.map((producto) => (
+            <div key={producto.IdProducto} className="producto-card">
+              <div className="producto-card-header">
+                <img src={producto.ImagenUrl} alt={producto.Nombre} />
+                <div className="producto-card-info">
+                  <h5 className="nombre">{producto.Nombre}</h5>
+                  <p className="descripcion">{producto.Descripcion}</p>
+                  <p className="precio">₡{producto.Precio}</p>
+                </div>
+              </div>
+              <div className="producto-card-acciones">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => abrirModalEditar(producto)}
+                >
+                  <FaEdit className="me-1" /> Editar
+                </Button>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => abrirModalEliminar(producto)}
+                >
+                  <FaTrash className="me-1" /> Eliminar
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
 
         {/* 📄 Paginación */}
         <ReactPaginate
           previousLabel={
             <span className="d-flex align-items-center gap-2 text-success">
-              <FaArrowLeft /> Anterior
+              <FaArrowLeft />
+              <span className="texto-paginacion">Anterior</span>
             </span>
           }
           nextLabel={
             <span className="d-flex align-items-center gap-2 text-success">
-              Siguiente <FaArrowRight />
+              <span className="texto-paginacion">Siguiente</span>
+              <FaArrowRight />
             </span>
           }
           breakLabel={"..."}

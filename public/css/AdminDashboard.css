@@ -353,24 +353,4 @@
     padding: 0.5rem 0.6rem;
     white-space: nowrap; /* evita que el contenido baje de línea */
   }
-
-  .table-responsive::-webkit-scrollbar {
-    height: 5px;
-  }
-
-  .table-responsive::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 3px;
-  }
-
-  .sidebar-toggle {
-    left: 0;
-    top: 64px;
-    font-size: 1rem;
-    padding: 0.4rem 0.5rem;
-  }
-
-  .sidebar-toggle.abierto {
-    left: 60px;
-  }
 }

@@ -3,45 +3,45 @@ import { FaTachometerAlt, FaUsers, FaBoxOpen } from "react-icons/fa";
 import { useLocation, Link } from "react-router-dom";
 import "../../public/css/AdminDashboard.css"; // Ya ahí está todo el estilo
 
-export default function SidebarAdmin() {
+export default function SidebarAdmin({ vertical = false }) {
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
 
   return (
-    <aside className="admin-sidebar">
-      <ul className="sidebar-menu">
+    <div className={vertical ? "sidebar-admin-vertical" : "sidebar-admin-horizontal"}>
+      <ul className="sidebar-menu list-unstyled d-flex gap-3 mb-0">
         <li>
           <Link
             to="/admin"
-            className={`sidebar-link ${
+            className={`sidebar-link d-flex align-items-center gap-1 ${
               isActive("/admin") ? "active-link" : ""
             }`}
           >
-            <FaTachometerAlt /> Dashboard
+            <FaTachometerAlt /> {vertical && "Dashboard"}
           </Link>
         </li>
         <li>
           <Link
             to="/admin/usuarios"
-            className={`sidebar-link ${
+            className={`sidebar-link d-flex align-items-center gap-1 ${
               isActive("/admin/usuarios") ? "active-link" : ""
             }`}
           >
-            <FaUsers /> Usuarios
+            <FaUsers /> {vertical && "Usuarios"}
           </Link>
         </li>
         <li>
           <Link
             to="/admin/productos"
-            className={`sidebar-link ${
+            className={`sidebar-link d-flex align-items-center gap-1 ${
               isActive("/admin/productos") ? "active-link" : ""
             }`}
           >
-            <FaBoxOpen /> Productos
+            <FaBoxOpen /> {vertical && "Productos"}
           </Link>
         </li>
       </ul>
-    </aside>
+    </div>
   );
 }

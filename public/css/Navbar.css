@@ -30,3 +30,111 @@
     justify-content: space-between;
   }
 }
+
+/* Enlaces del sidebar horizontal */
+.sidebar-admin-horizontal .sidebar-link {
+  color: white;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.sidebar-admin-horizontal .sidebar-link:hover {
+  text-decoration: underline;
+}
+
+.sidebar-admin-horizontal .active-link {
+  color: #0dcaf0;
+}
+
+.sidebar-admin-vertical {
+  display: flex;
+  align-items: center;
+}
+
+/* Estilos de los dropdown-items */
+.dropdown-item.active {
+  background-color: #0dcaf0 !important;
+  color: black !important;
+  font-weight: 600;
+}
+
+.dropdown-item:hover {
+  background-color: #198754 !important;
+  color: white !important;
+}
+
+/* Menú desplegable admin integrado */
+.menu-admin {
+  background-color: #212529; /* igual al navbar */
+  border-radius: 10px;
+  padding: 8px 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.2s ease-out;
+  list-style: none;
+  min-width: 180px;
+}
+
+.menu-admin li {
+  list-style: none;
+}
+
+.menu-admin .dropdown-item {
+  padding: 10px 16px;
+  color: white;
+  text-decoration: none;
+  transition: background 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-admin .dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-admin .active {
+  background-color: #0dcaf0 !important;
+  color: black !important;
+  font-weight: 600;
+}
+
+/* Transición del icono ▼ */
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: transform 0.2s ease;
+}
+
+.transition {
+  transition: transform 0.2s ease;
+}
+
+/* Animación suave */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-icon-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-icon-group .nav-link {
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  .nav-icon-group svg {
+    font-size: 1.3rem;
+    margin-bottom: 0.2rem;
+  }
+}

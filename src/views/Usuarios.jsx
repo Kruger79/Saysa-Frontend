@@ -4,7 +4,6 @@ import "../../public/css/Usuarios.css";
 import { FaUserPlus, FaEdit, FaSearch } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { obtenerUsuarios, actualizarRolUsuario } from "../api/usuarios";
-import SidebarAdmin from "../components/SidebarAdmin";
 import ReactPaginate from "react-paginate";
 import "../../public/css/ReactPaginate.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
@@ -30,7 +29,7 @@ export default function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [editandoPedidoId, seteditandoPedidoId] = useState(null);
   const [paginaActual, setPaginaActual] = useState(0);
-  const itemsPorPagina = 6;
+  const itemsPorPagina = 10;
   const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
@@ -93,7 +92,6 @@ export default function Usuarios() {
   return (
     <div className="usuarios-page">
       <NavbarAdmin />
-      <SidebarAdmin />
       <div className="usuarios-container">
         <div className="usuarios-header">
           <h1>Usuarios Registrados</h1>

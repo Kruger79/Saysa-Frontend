@@ -48,9 +48,9 @@ const ModalEditarProducto = ({
   if (!producto) return null;
 
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Editar Producto</Modal.Title>
+        <Modal.Title className="text-center w-100">Editar Producto</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>

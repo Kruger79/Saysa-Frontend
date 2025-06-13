@@ -36,9 +36,9 @@ const ModalAgregarProducto = ({ show, handleClose, onProductoGuardado }) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Agregar Producto</Modal.Title>
+        <Modal.Title className="text-center w-100">Agregar Producto</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
