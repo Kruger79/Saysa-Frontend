@@ -308,6 +308,14 @@
 
 /* Ocultar texto en móviles */
 @media (max-width: 768px) {
+
+  .paginacion {
+    max-width: 340px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .texto-paginacion {
     display: none !important;
   }

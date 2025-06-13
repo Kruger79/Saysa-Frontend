@@ -102,7 +102,7 @@ export default function Usuarios() {
             <FaSearch className="usuarios-busqueda-icono" />
             <input
               type="text"
-              placeholder="Buscar por nombre, correo o cédula"
+              placeholder="por nombre, correo o cédula"
               value={busqueda}
               onChange={(e) => {
                 setBusqueda(e.target.value);
@@ -163,16 +163,50 @@ export default function Usuarios() {
           </tbody>
         </table>
 
-        {/*Paginación */}
+        {/* Tarjetas móviles */}
+<div className="usuarios-card-list d-md-none">
+  {usuariosPaginados.map((usuario) => (
+    <div className="usuario-card" key={usuario.IdUsuario}>
+      <h5>{resaltarCoincidencia(usuario.Nombre, busqueda)}</h5>
+      <p><strong>Correo:</strong> {resaltarCoincidencia(usuario.Correo, busqueda)}</p>
+      <p><strong>Cédula:</strong> {resaltarCoincidencia(usuario.Cedula, busqueda)}</p>
+      <p><strong>Teléfono:</strong> {usuario.Telefono}</p>
+      {editandoPedidoId === usuario.IdUsuario ? (
+        <select
+          value={usuario.Rol}
+          onChange={(e) => manejarCambioRol(usuario.IdUsuario, e.target.value)}
+          className="rol-select"
+        >
+          <option value="cliente">Cliente</option>
+          <option value="admin">Admin</option>
+        </select>
+      ) : (
+        <span className={`rol-badge ${usuario.Rol}`}>{usuario.Rol}</span>
+      )}
+      {editandoPedidoId !== usuario.IdUsuario && (
+        <button
+          className="editar-boton"
+          onClick={() => seteditandoPedidoId(usuario.IdUsuario)}
+        >
+          <FaEdit /> Editar Rol
+        </button>
+      )}
+    </div>
+  ))}
+</div>
+
+        {/* 📄 Paginación */}
         <ReactPaginate
           previousLabel={
             <span className="d-flex align-items-center gap-2 text-success">
-              <FaArrowLeft /> Anterior
+              <FaArrowLeft />
+              <span className="texto-paginacion">Anterior</span>
             </span>
           }
           nextLabel={
             <span className="d-flex align-items-center gap-2 text-success">
-              Siguiente <FaArrowRight />
+              <span className="texto-paginacion">Siguiente</span>
+              <FaArrowRight />
             </span>
           }
           breakLabel={"..."}

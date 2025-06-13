@@ -165,3 +165,115 @@
 .usuarios-busqueda-container:focus-within .usuarios-busqueda-icono {
   color: #22c55e; /* Verde más vibrante al enfocar */
 }
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 1200px;
+}
+
+
+/* 🔽 CENTRAR el título solo en pantallas pequeñas */
+@media (max-width: 768px) {
+  .usuarios-container {
+    margin-left: 0;
+    padding: 2rem 1rem 1rem;
+  }
+
+  .usuarios-header {
+    justify-content: center;
+  }
+
+  .usuarios-header h1 {
+    text-align: center;
+    font-size: 1.6rem;
+  }
+
+  .usuarios-busqueda {
+    justify-content: center;
+  }
+
+  .usuarios-busqueda-container {
+    max-width: 340px;
+  }
+
+  .usuarios-table {
+    display: none;
+  }
+
+  .usuarios-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .usuario-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 340px;
+  min-height: 240px; /* ya está bien definido */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+  .usuario-card h5 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+  }
+
+  .usuario-card p {
+    margin: 0.2rem 0;
+    font-size: 0.9rem;
+    color: #6b7280;
+  }
+
+  .usuario-card .rol-badge {
+    margin-top: 0.5rem;
+    display: inline-block;
+  }
+
+  .usuario-card .editar-boton {
+    margin-top: 0.7rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+   .rol-select {
+    font-size: 0.9rem;
+    padding: 0.4rem;
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 340px;
+}
+}

@@ -31,7 +31,7 @@ const AdminProductoCRUD = () => {
   const [precioEnvio, setPrecioEnvio] = useState(0);
   const [nuevoPrecioEnvio, setNuevoPrecioEnvio] = useState("");
   const [paginaActual, setPaginaActual] = useState(0);
-  const itemsPorPagina = 2;
+  const itemsPorPagina = 10;
 
   const cargarProductos = async () => {
     try {
