@@ -7,6 +7,8 @@ import { obtenerUsuarios, actualizarRolUsuario } from "../api/usuarios";
 import ReactPaginate from "react-paginate";
 import "../../public/css/ReactPaginate.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import PinaLoader from "../components/PinaLoader";
+
 
 function resaltarCoincidencia(texto, termino) {
   if (!termino) return texto;
@@ -31,6 +33,8 @@ export default function Usuarios() {
   const [paginaActual, setPaginaActual] = useState(0);
   const itemsPorPagina = 10;
   const [busqueda, setBusqueda] = useState("");
+  const [cargandoPagina, setCargandoPagina] = useState(false);
+  
 
   useEffect(() => {
     async function cargarUsuarios() {
@@ -86,8 +90,17 @@ export default function Usuarios() {
   const totalPaginas = Math.ceil(usuariosFiltrados.length / itemsPorPagina);
 
   const handlePageClick = ({ selected }) => {
-    setPaginaActual(selected);
-  };
+  setCargandoPagina(true);
+
+  setTimeout(() => {
+    setPaginaActual(selected); // ✅ se actualiza después de la animación
+    setCargandoPagina(false);
+  }, 1500); // puedes ajustar el tiempo según lo que dure tu piña
+};
+
+if (cargandoPagina) {
+  return <PinaLoader />;
+}
 
   return (
     <div className="usuarios-page">
@@ -164,36 +177,48 @@ export default function Usuarios() {
         </table>
 
         {/* Tarjetas móviles */}
-<div className="usuarios-card-list d-md-none">
-  {usuariosPaginados.map((usuario) => (
-    <div className="usuario-card" key={usuario.IdUsuario}>
-      <h5>{resaltarCoincidencia(usuario.Nombre, busqueda)}</h5>
-      <p><strong>Correo:</strong> {resaltarCoincidencia(usuario.Correo, busqueda)}</p>
-      <p><strong>Cédula:</strong> {resaltarCoincidencia(usuario.Cedula, busqueda)}</p>
-      <p><strong>Teléfono:</strong> {usuario.Telefono}</p>
-      {editandoPedidoId === usuario.IdUsuario ? (
-        <select
-          value={usuario.Rol}
-          onChange={(e) => manejarCambioRol(usuario.IdUsuario, e.target.value)}
-          className="rol-select"
-        >
-          <option value="cliente">Cliente</option>
-          <option value="admin">Admin</option>
-        </select>
-      ) : (
-        <span className={`rol-badge ${usuario.Rol}`}>{usuario.Rol}</span>
-      )}
-      {editandoPedidoId !== usuario.IdUsuario && (
-        <button
-          className="editar-boton"
-          onClick={() => seteditandoPedidoId(usuario.IdUsuario)}
-        >
-          <FaEdit /> Editar Rol
-        </button>
-      )}
-    </div>
-  ))}
-</div>
+        <div className="usuarios-card-list d-md-none">
+          {usuariosPaginados.map((usuario) => (
+            <div className="usuario-card" key={usuario.IdUsuario}>
+              <h5>{resaltarCoincidencia(usuario.Nombre, busqueda)}</h5>
+              <p>
+                <strong>Correo:</strong>{" "}
+                {resaltarCoincidencia(usuario.Correo, busqueda)}
+              </p>
+              <p>
+                <strong>Cédula:</strong>{" "}
+                {resaltarCoincidencia(usuario.Cedula, busqueda)}
+              </p>
+              <p>
+                <strong>Teléfono:</strong> {usuario.Telefono}
+              </p>
+              {editandoPedidoId === usuario.IdUsuario ? (
+                <select
+                  value={usuario.Rol}
+                  onChange={(e) =>
+                    manejarCambioRol(usuario.IdUsuario, e.target.value)
+                  }
+                  className="rol-select"
+                >
+                  <option value="cliente">Cliente</option>
+                  <option value="admin">Admin</option>
+                </select>
+              ) : (
+                <span className={`rol-badge ${usuario.Rol}`}>
+                  {usuario.Rol}
+                </span>
+              )}
+              {editandoPedidoId !== usuario.IdUsuario && (
+                <button
+                  className="editar-boton"
+                  onClick={() => seteditandoPedidoId(usuario.IdUsuario)}
+                >
+                  <FaEdit /> Editar Rol
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
 
         {/* 📄 Paginación */}
         <ReactPaginate
@@ -212,6 +237,7 @@ export default function Usuarios() {
           breakLabel={"..."}
           pageCount={totalPaginas}
           onPageChange={handlePageClick}
+          forcePage={paginaActual}
           containerClassName={"paginacion"}
           pageClassName={"pagina"}
           pageLinkClassName={"pagina-link"}

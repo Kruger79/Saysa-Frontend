@@ -28,7 +28,8 @@
   background-color: #111827;
   color: white;
   position: fixed;
-  top: 64px; /* justo debajo del navbar */
+  top: 64px;
+  /* justo debajo del navbar */
   left: 0;
   bottom: 0;
   z-index: 999;
@@ -49,7 +50,8 @@
 /* Posición fija general */
 .sidebar-toggle {
   position: fixed;
-  top: 64px;              /* justo debajo del navbar */
+  top: 64px;
+  /* justo debajo del navbar */
   left: 0;
   z-index: 1100;
   background: #4db49f;
@@ -64,8 +66,10 @@
 
 /* Cuando el sidebar está abierto */
 .sidebar-toggle.abierto {
-  left: 220px;            /* borde derecho del sidebar */
-  top: 64px;              /* sigue debajo del navbar */
+  left: 220px;
+  /* borde derecho del sidebar */
+  top: 64px;
+  /* sigue debajo del navbar */
   border-radius: 6px 0 0 6px;
 }
 
@@ -113,7 +117,8 @@
 /* Contenido Principal */
 .admin-body {
   display: flex;
-  margin-top: 64px; /* dejar espacio al navbar */
+  margin-top: 64px;
+  /* dejar espacio al navbar */
 }
 
 .admin-container {
@@ -262,24 +267,13 @@
 .table-responsive::-webkit-scrollbar {
   height: 5px;
 }
+
 .table-responsive::-webkit-scrollbar-thumb {
   background-color: #ccc;
   border-radius: 3px;
 }
 
 @media (max-width: 600px) {
-
-  .admin-navbar {
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 0.5rem 1rem;
-  }
-
-  .admin-navbar .logo img {
-    width: 32px;
-    height: 32px;
-    object-fit: contain;
-  }
 
   .admin-container {
     margin-left: 0;
@@ -310,23 +304,27 @@
   }
 
   .filtros-superiores {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 1.2rem;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
   }
 
-  .filtro-estado,
+  .filtro-estado {
+    flex: 1 1 140px;
+    max-width: 100%;
+    font-size: 0.7rem;
+  }
+
   .search-bar {
-    width: 100%;
-    max-width: 350px;
+    flex: 1 1 140px;
+    max-width: 100%;
   }
 
-  .search-bar input {
+  .search-bar form {
     width: 100%;
   }
+
 
   .section-title {
     font-size: 1.2rem;
@@ -334,23 +332,76 @@
     margin-bottom: 1rem;
   }
 
-  .table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-    padding-bottom: 0.8rem;
-    padding-left: 0.2rem;
-    padding-right: 0.2rem;
-  }
-
   .admin-table {
-    min-width: 700px; /* fuerza scroll horizontal si el viewport es más pequeño */
-    font-size: 0.75rem;
+    display: none;
   }
 
-  .admin-table th,
-  .admin-table td {
-    padding: 0.5rem 0.6rem;
-    white-space: nowrap; /* evita que el contenido baje de línea */
+  .pedido-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .pedido-card {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    font-size: 0.95rem;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .pedido-card p {
+    margin: 0.4rem 0;
+  }
+
+  .pedido-card .rol-badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+  }
+
+  .pedido-acciones {
+    margin-top: 0.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pedido-acciones .btn,
+  .pedido-acciones .rol-select {
+    width: 100%;
+    font-size: 0.7rem;
+    padding: 0.5rem;
+  }
+}
+
+/* Ocultar tarjetas en desktop */
+@media (min-width: 769px) {
+  .pedido-card-list {
+    display: none;
+  }
+}
+
+/* 🔽 Animación más notoria al cambiar de página */
+.fadeInPage {
+  animation: fadeInPage 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes fadeInPage {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.01);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
   }
 }

@@ -2,14 +2,10 @@ import React, { useEffect, useState } from "react";
 import "../../public/css/AdminDashboard.css";
 import {
   FaSearch,
-  FaTachometerAlt,
-  FaUsers,
-  FaBoxOpen,
   FaEdit,
   FaCheck,
   FaArrowLeft,
   FaArrowRight,
-  FaTimes,
 } from "react-icons/fa";
 import NavbarAdmin from "../components/Navbar";
 import { useLocation, Link } from "react-router-dom";
@@ -17,6 +13,7 @@ import { toast } from "react-toastify";
 import ReactPaginate from "react-paginate";
 import "../../public/css/ReactPaginate.css";
 import { Table } from "react-bootstrap";
+import PinaLoader from "../components/PinaLoader";
 
 export default function AdminDashboard() {
   const location = useLocation();
@@ -27,7 +24,7 @@ export default function AdminDashboard() {
   const [filtroEstado, setFiltroEstado] = useState("pendiente"); // Cambia "todos" por "pendiente"
   const [paginaActual, setPaginaActual] = useState(0);
   const itemsPorPagina = 10;
-  const [sidebarAbierto, setSidebarAbierto] = useState(true);
+  const [cargandoPagina, setCargandoPagina] = useState(false);
 
   useEffect(() => {
     async function fetchPedidos() {
@@ -64,8 +61,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const isActive = (path) => location.pathname === path;
-
   const formatearFecha = (fecha) => {
     const f = new Date(fecha);
     return isNaN(f)
@@ -96,8 +91,17 @@ export default function AdminDashboard() {
   const totalPaginas = Math.ceil(pedidosFiltrados.length / itemsPorPagina);
 
   const handlePageClick = ({ selected }) => {
-    setPaginaActual(selected);
+    setCargandoPagina(true);
+
+    setTimeout(() => {
+      setPaginaActual(selected); // ✅ se actualiza después de la animación
+      setCargandoPagina(false);
+    }, 1500); // puedes ajustar el tiempo según lo que dure tu piña
   };
+
+  if (cargandoPagina) {
+    return <PinaLoader />;
+  }
 
   return (
     <div className="admin-dashboard">
@@ -150,7 +154,15 @@ export default function AdminDashboard() {
               <select
                 id="filtroEstado"
                 value={filtroEstado}
-                onChange={(e) => setFiltroEstado(e.target.value)}
+                onChange={(e) => {
+                  const nuevoEstado = e.target.value;
+                  setCargandoPagina(true);
+                  setTimeout(() => {
+                    setFiltroEstado(nuevoEstado);
+                    setPaginaActual(0);
+                    setCargandoPagina(false);
+                  }, 1500);
+                }}
                 style={{
                   padding: "6px 12px",
                   borderRadius: 6,
@@ -306,21 +318,105 @@ export default function AdminDashboard() {
             </tbody>
           </Table>
 
-          {/* ✅ PAGINACIÓN */}
+          {/* Tarjetas de pedidos en móviles */}
+          <div className="pedido-card-list">
+            {pedidosPaginados.map((pedido) => (
+              <div className="pedido-card" key={pedido.IdPedido}>
+                <p>
+                  <strong>Pedido:</strong> {pedido.IdPedido}
+                </p>
+                <p>
+                  <strong>Fecha:</strong> {formatearFecha(pedido.FechaPedido)}
+                </p>
+                <p>
+                  <strong>Cliente:</strong> {pedido.NombreCliente}
+                </p>
+                <p>
+                  <strong>Cédula:</strong> {pedido.Cedula}
+                </p>
+                <p>
+                  <strong>Estado:</strong>
+                  {editandoPedidoId === pedido.IdPedido ? (
+                    <select
+                      value={
+                        estadosTemporales[pedido.IdPedido] || pedido.Estado
+                      }
+                      onChange={(e) =>
+                        setEstadosTemporales((prev) => ({
+                          ...prev,
+                          [pedido.IdPedido]: e.target.value,
+                        }))
+                      }
+                      className="rol-select"
+                    >
+                      <option value="Pendiente">Pendiente</option>
+                      <option value="Enviada">Enviada</option>
+                      <option value="Aceptada">Aceptada</option>
+                      <option value="Rechazada">Rechazada</option>
+                    </select>
+                  ) : (
+                    <span
+                      className={`rol-badge ${pedido.Estado?.toLowerCase()}`}
+                    >
+                      {pedido.Estado || "Pendiente"}
+                    </span>
+                  )}
+                </p>
+                <div className="pedido-acciones">
+                  {["Aceptada", "Rechazada"].includes(pedido.Estado) ? (
+                    <span className="text-muted">—</span>
+                  ) : editandoPedidoId === pedido.IdPedido ? (
+                    <button
+                      className="btn btn-success"
+                      onClick={async () => {
+                        const nuevoEstado =
+                          estadosTemporales[pedido.IdPedido] || pedido.Estado;
+                        await actualizarEstadoCotizacion(
+                          pedido.IdCotizacion,
+                          nuevoEstado
+                        );
+                        setEditandoPedidoId(null);
+                      }}
+                    >
+                      <FaCheck /> Guardar
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        setEditandoPedidoId(pedido.IdPedido);
+                        setEstadosTemporales((prev) => ({
+                          ...prev,
+                          [pedido.IdPedido]: pedido.Estado || "Pendiente",
+                        }));
+                      }}
+                    >
+                      <FaEdit /> Editar
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* 📄 Paginación */}
           <ReactPaginate
             previousLabel={
               <span className="d-flex align-items-center gap-2 text-success">
-                <FaArrowLeft /> Anterior
+                <FaArrowLeft />
+                <span className="texto-paginacion">Anterior</span>
               </span>
             }
             nextLabel={
               <span className="d-flex align-items-center gap-2 text-success">
-                Siguiente <FaArrowRight />
+                <span className="texto-paginacion">Siguiente</span>
+                <FaArrowRight />
               </span>
             }
             breakLabel={"..."}
             pageCount={totalPaginas}
             onPageChange={handlePageClick}
+            forcePage={paginaActual}
             containerClassName={"paginacion"}
             pageClassName={"pagina"}
             pageLinkClassName={"pagina-link"}
