@@ -1,15 +1,16 @@
+// src/components/BananoLoader.jsx
 import React from "react";
 import "../../public/css/BananoLoader.css";
 
-export default function PinaLoader() {
+export default function BananoLoader() {
   return (
-    <div className="pina-loader-container">
+    <div className="banano-overlay">
       <img
         src="../../public/banano-bailando.gif"
-        alt="Cargando..."
+        alt="Cerrando sesión..."
         className="banano-loader"
       />
-      <p>Cargando...</p>
+      <p className="texto-cierre">Cerrando sesión...</p>
     </div>
   );
 }

@@ -13,7 +13,7 @@ import {
 import { toast } from "react-toastify";
 import logo from "../../public/logo-saysa.png";
 import "../../public/css/Navbar.css";
-import LoadingOverlay from "./LoadingOverlay";
+import BananoLoader from "./BananoLoader";
 
 export default function Navbar() {
   const location = useLocation();
@@ -289,7 +289,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {cargando && <LoadingOverlay />}
+      {cargando && <BananoLoader />}
     </nav>
   );
 }
