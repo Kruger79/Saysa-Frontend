@@ -8,7 +8,7 @@ import {
   FaChevronDown,
   FaUserFriends,
   FaBoxOpen,
-  FaStore
+  FaStore,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
 import logo from "../../public/logo-saysa.png";
@@ -143,7 +143,10 @@ export default function Navbar() {
                 </button>
 
                 {showAdminMenu && (
-                  <ul className="menu-admin position-absolute mt-2 z-3 bg-dark" style={{ minWidth: 200 }}>
+                  <ul
+                    className="menu-admin position-absolute mt-2 z-3 bg-dark"
+                    style={{ minWidth: 200 }}
+                  >
                     {location.pathname !== "/admin" && (
                       <li>
                         <Link
