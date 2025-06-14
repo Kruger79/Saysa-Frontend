@@ -5,7 +5,7 @@ export default function PinaLoader() {
   return (
     <div className="pina-loader-container">
       <img
-        src="../../public/pina-bailando.gif"
+        src="/pina-bailando.gif"
         alt="Cargando..."
         className="pina-loader"
       />

@@ -6,7 +6,7 @@ export default function BananoLoader() {
   return (
     <div className="banano-overlay">
       <img
-        src="../../public/banano-bailando.gif"
+        src="/banano-bailando.gif"
         alt="Cerrando sesión..."
         className="banano-loader"
       />
