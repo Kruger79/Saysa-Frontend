@@ -19,7 +19,7 @@ export default function Cotizaciones() {
     async function cargarCotizaciones() {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/v1/cotizaciones/${usuario.Cedula}`
+          `${import.meta.env.VITE_API_URL}/cotizaciones/${usuario.Cedula}`
         );
         const data = await response.json();
         setCotizaciones(data);
