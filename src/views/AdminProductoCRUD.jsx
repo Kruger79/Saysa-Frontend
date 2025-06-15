@@ -95,6 +95,14 @@ const AdminProductoCRUD = () => {
     setPaginaActual(selected);
   };
 
+  function resaltarCoincidencia(texto, busqueda) {
+    if (!busqueda) return texto;
+    const regex = new RegExp(`(${busqueda})`, "gi");
+    return texto.split(regex).map((parte, i) =>
+      regex.test(parte) ? <mark key={i}>{parte}</mark> : parte
+    );
+  }
+
   return (
     <div className="admin-productos-page">
       <NavbarAdmin />
@@ -159,8 +167,8 @@ const AdminProductoCRUD = () => {
             <tbody>
               {productosPaginados.map((producto) => (
                 <tr key={producto.IdProducto}>
-                  <td>{producto.Nombre}</td>
-                  <td>{producto.Descripcion}</td>
+                  <td>{resaltarCoincidencia(producto.Nombre, busqueda)}</td>
+                  <td>{resaltarCoincidencia(producto.Descripcion, busqueda)}</td>
                   <td>₡{producto.Precio}</td>
                   <td>
                     <img
@@ -198,8 +206,8 @@ const AdminProductoCRUD = () => {
               <div className="producto-card-header">
                 <img src={producto.ImagenUrl} alt={producto.Nombre} />
                 <div className="producto-card-info">
-                  <h5 className="nombre">{producto.Nombre}</h5>
-                  <p className="descripcion">{producto.Descripcion}</p>
+                  <h5 className="nombre">{resaltarCoincidencia(producto.Nombre, busqueda)}</h5>
+                  <p className="descripcion">{resaltarCoincidencia(producto.Descripcion, busqueda)}</p>
                   <p className="precio">₡{producto.Precio}</p>
                 </div>
               </div>
