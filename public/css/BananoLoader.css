@@ -1,19 +1,36 @@
-.banano-loader-container {
+.banano-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(255, 255, 255);
+  z-index: 9999;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* ahora ocupa toda la pantalla */
+  color: white;
+  font-size: 1.2rem;
+  font-family: 'Segoe UI', sans-serif;
   animation: fadeIn 0.4s ease-in-out;
 }
 
+
 .banano-loader {
-  width: 100px;
+  width: 140px;
   height: auto;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.texto-cierre {
+  color: #1f2937;
+  font-size: 1.2rem;
+  margin-top: 10px;
+  text-align: center;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
+  from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }

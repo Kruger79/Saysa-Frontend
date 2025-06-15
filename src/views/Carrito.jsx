@@ -74,7 +74,7 @@ export default function Carrito() {
     }));
 
     try {
-      await fetch("http://localhost:3000/api/v1/cotizaciones", {
+      await fetch(`${import.meta.env.VITE_API_URL}/cotizaciones`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

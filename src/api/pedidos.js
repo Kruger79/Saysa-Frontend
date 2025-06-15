@@ -1,6 +1,6 @@
 // Esta función usa el mismo backend de cotizaciones
 export async function crearCotizacion(datos) {
-  const response = await fetch("http://localhost:3000/api/v1/cotizaciones", {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/cotizaciones`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(datos),

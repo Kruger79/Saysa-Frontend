@@ -29,7 +29,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function fetchPedidos() {
       try {
-        const response = await fetch("http://localhost:3000/api/v1/pedidos");
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/pedidos`);
         const data = await response.json();
         setPedidos(data);
       } catch (error) {
@@ -42,7 +42,7 @@ export default function AdminDashboard() {
 
   const actualizarEstadoCotizacion = async (idCotizacion, nuevoEstado) => {
     try {
-      await fetch(`http://localhost:3000/api/v1/cotizaciones/${idCotizacion}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/cotizaciones/${idCotizacion}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ estado: nuevoEstado }),

@@ -38,7 +38,7 @@ export default function ProductoCard({ producto, reverse }) {
         <h2>{producto.Nombre}</h2>
         <p>{producto.Descripcion}</p>
         <p className="precio">
-          <strong>Precio:</strong> ${producto.Precio}
+          <strong>Precio:</strong> ₡{producto.Precio}
         </p>
 
         {/* Botón para agregar al carrito */}
