@@ -70,6 +70,15 @@ export default function AdminDashboard() {
           .padStart(2, "0")}/${f.getFullYear()}`;
   };
 
+  function resaltarCoincidencia(texto, busqueda) {
+    if (!busqueda) return texto;
+    if (texto === undefined || texto === null) return "";
+    const regex = new RegExp(`(${busqueda})`, "gi");
+    return texto.toString().split(regex).map((parte, i) =>
+      regex.test(parte) ? <mark key={i}>{parte}</mark> : parte
+    );
+  }
+
   // Filtrar por búsqueda y estado
   const pedidosFiltrados = pedidos.filter((pedido) => {
     const coincideBusqueda =
@@ -232,8 +241,8 @@ export default function AdminDashboard() {
                 <tr key={pedido.IdPedido}>
                   <td>{pedido.IdPedido}</td>
                   <td>{formatearFecha(pedido.FechaPedido)}</td>
-                  <td>{pedido.NombreCliente}</td>
-                  <td>{pedido.Cedula}</td>
+                  <td>{resaltarCoincidencia(pedido.NombreCliente, busqueda)}</td>
+                  <td>{resaltarCoincidencia(pedido.Cedula, busqueda)}</td>
                   <td>
                     {pedido.IdCotizacion ? (
                       ["Aceptada", "Rechazada"].includes(pedido.Estado) ? (
@@ -329,10 +338,10 @@ export default function AdminDashboard() {
                   <strong>Fecha:</strong> {formatearFecha(pedido.FechaPedido)}
                 </p>
                 <p>
-                  <strong>Cliente:</strong> {pedido.NombreCliente}
+                  <strong>Cliente:</strong> {resaltarCoincidencia(pedido.NombreCliente, busqueda)}
                 </p>
                 <p>
-                  <strong>Cédula:</strong> {pedido.Cedula}
+                  <strong>Cédula:</strong> {resaltarCoincidencia(pedido.Cedula, busqueda)}
                 </p>
                 <p>
                   <strong>Estado:</strong>
