@@ -94,13 +94,27 @@ export default function Navbar() {
     };
   }, []);
 
-  // Auto logout tras 10 minutos de inactividad
+  // Auto logout tras 5 minutos de inactividad
   useEffect(() => {
     const tiempoLimite = 5 * 60 * 1000; // 5 minutos
+    const claveUltimoMovimiento = "ultimoMovimiento";
+    const ahora = Date.now();
+
+    // Verifica si ya expiró la sesión ANTES de hacer cualquier cosa
+    const ultimoMovimiento = parseInt(
+      localStorage.getItem(claveUltimoMovimiento),
+      10
+    );
+    if (!isNaN(ultimoMovimiento) && ahora - ultimoMovimiento > tiempoLimite) {
+      localStorage.removeItem("usuario");
+      localStorage.removeItem(claveUltimoMovimiento);
+    }
+
     let timeout;
 
     const cerrarSesionPorInactividad = () => {
       localStorage.removeItem("usuario");
+      localStorage.removeItem(claveUltimoMovimiento);
       toast.info("Sesión cerrada por inactividad");
       setCargando(true);
       setTimeout(() => {
@@ -109,21 +123,24 @@ export default function Navbar() {
     };
 
     const resetTimer = () => {
+      const ahora = Date.now();
+      localStorage.setItem(claveUltimoMovimiento, ahora.toString());
       clearTimeout(timeout);
       timeout = setTimeout(cerrarSesionPorInactividad, tiempoLimite);
     };
 
-    // Eventos que reinician el temporizador
+    // Inicia el temporizador
+    timeout = setTimeout(cerrarSesionPorInactividad, tiempoLimite);
     const eventos = ["mousemove", "keydown", "click", "scroll"];
     eventos.forEach((ev) => window.addEventListener(ev, resetTimer));
-
-    resetTimer(); // Inicial
+    resetTimer();
 
     return () => {
       clearTimeout(timeout);
       eventos.forEach((ev) => window.removeEventListener(ev, resetTimer));
     };
   }, []);
+
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm px-3">
