@@ -94,6 +94,37 @@ export default function Navbar() {
     };
   }, []);
 
+  // Auto logout tras 10 minutos de inactividad
+  useEffect(() => {
+    const tiempoLimite = 5 * 60 * 1000; // 5 minutos
+    let timeout;
+
+    const cerrarSesionPorInactividad = () => {
+      localStorage.removeItem("usuario");
+      toast.info("Sesión cerrada por inactividad");
+      setCargando(true);
+      setTimeout(() => {
+        window.location.href = window.location.origin;
+      }, 2000);
+    };
+
+    const resetTimer = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(cerrarSesionPorInactividad, tiempoLimite);
+    };
+
+    // Eventos que reinician el temporizador
+    const eventos = ["mousemove", "keydown", "click", "scroll"];
+    eventos.forEach((ev) => window.addEventListener(ev, resetTimer));
+
+    resetTimer(); // Inicial
+
+    return () => {
+      clearTimeout(timeout);
+      eventos.forEach((ev) => window.removeEventListener(ev, resetTimer));
+    };
+  }, []);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm px-3">
       <div className="container-fluid d-flex justify-content-between align-items-center">
@@ -230,7 +261,11 @@ export default function Navbar() {
 
           <div className="d-flex gap-3 mt-3 mt-lg-0 align-items-center justify-content-end">
             {rol !== "admin" && (
-              <div className="position-relative" style={{ cursor: "pointer" }} onClick={() => navigate("/carrito")}> 
+              <div
+                className="position-relative"
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate("/carrito")}
+              >
                 <FaShoppingCart size={24} className="icon-hover icon-white" />
                 {cantidadCarrito > 0 && (
                   <span
