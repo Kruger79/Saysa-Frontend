@@ -6,6 +6,7 @@ import {
   FaCheck,
   FaArrowLeft,
   FaArrowRight,
+  FaClock,
 } from "react-icons/fa";
 import NavbarAdmin from "../components/Navbar";
 import { useLocation, Link } from "react-router-dom";
@@ -14,6 +15,7 @@ import ReactPaginate from "react-paginate";
 import "../../public/css/ReactPaginate.css";
 import { Table } from "react-bootstrap";
 import PinaLoader from "../components/PinaLoader";
+import FechaEntregaModal from "../components/ModalFechaEntrega";
 
 export default function AdminDashboard() {
   const location = useLocation();
@@ -25,6 +27,10 @@ export default function AdminDashboard() {
   const [paginaActual, setPaginaActual] = useState(0);
   const itemsPorPagina = 10;
   const [cargandoPagina, setCargandoPagina] = useState(false);
+  const [editandoFechaPedidoId, setEditandoFechaPedidoId] = useState(null);
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [detalleParaEditar, setDetalleParaEditar] = useState(null);
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
 
   useEffect(() => {
     async function fetchPedidos() {
@@ -42,11 +48,14 @@ export default function AdminDashboard() {
 
   const actualizarEstadoCotizacion = async (idCotizacion, nuevoEstado) => {
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/cotizaciones/${idCotizacion}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ estado: nuevoEstado }),
-      });
+      await fetch(
+        `${import.meta.env.VITE_API_URL}/cotizaciones/${idCotizacion}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ estado: nuevoEstado }),
+        }
+      );
 
       setPedidos((prev) =>
         prev.map((p) =>
@@ -62,21 +71,41 @@ export default function AdminDashboard() {
   };
 
   const formatearFecha = (fecha) => {
-    const f = new Date(fecha);
-    return isNaN(f)
-      ? "Fecha inválida"
-      : `${f.getDate().toString().padStart(2, "0")}/${(f.getMonth() + 1)
-          .toString()
-          .padStart(2, "0")}/${f.getFullYear()}`;
+    if (!fecha) return "Sin definir";
+
+    const soloFecha = fecha.split("T")[0]; // '2025-06-15'
+    const [año, mes, dia] = soloFecha.split("-");
+    return `${parseInt(dia)} de ${obtenerNombreMes(mes)} de ${año}`;
+  };
+
+  const obtenerNombreMes = (mes) => {
+    const meses = [
+      "enero",
+      "febrero",
+      "marzo",
+      "abril",
+      "mayo",
+      "junio",
+      "julio",
+      "agosto",
+      "septiembre",
+      "octubre",
+      "noviembre",
+      "diciembre",
+    ];
+    return meses[parseInt(mes, 10) - 1];
   };
 
   function resaltarCoincidencia(texto, busqueda) {
     if (!busqueda) return texto;
     if (texto === undefined || texto === null) return "";
     const regex = new RegExp(`(${busqueda})`, "gi");
-    return texto.toString().split(regex).map((parte, i) =>
-      regex.test(parte) ? <mark key={i}>{parte}</mark> : parte
-    );
+    return texto
+      .toString()
+      .split(regex)
+      .map((parte, i) =>
+        regex.test(parte) ? <mark key={i}>{parte}</mark> : parte
+      );
   }
 
   // Filtrar por búsqueda y estado
@@ -106,6 +135,72 @@ export default function AdminDashboard() {
       setPaginaActual(selected); // ✅ se actualiza después de la animación
       setCargandoPagina(false);
     }, 1500); // puedes ajustar el tiempo según lo que dure tu piña
+  };
+
+  const actualizarTiempoEntrega = async (idDetalle, tiempoEntrega) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/cotizaciones/fecha-entrega`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idDetalle, tiempoEntrega }),
+        }
+      );
+
+      if (!response.ok)
+        throw new Error("Error al actualizar tiempo de entrega");
+
+      // 🔁 Actualiza localmente el pedido con la nueva fecha
+      setPedidos((prevPedidos) =>
+        prevPedidos.map((p) =>
+          p.IdDetalle === idDetalle ? { ...p, TiempoEntrega: tiempoEntrega } : p
+        )
+      );
+
+      toast.success("Tiempo de entrega actualizado correctamente ✅");
+    } catch (error) {
+      console.error("❌ Error:", error);
+      toast.error("No se pudo actualizar el tiempo de entrega");
+    }
+  };
+
+  const abrirModal = (idDetalle) => {
+    setDetalleParaEditar(idDetalle);
+    setFechaSeleccionada(null);
+    setMostrarModal(true);
+  };
+
+  const cerrarModal = () => {
+    setMostrarModal(false);
+    setDetalleParaEditar(null);
+  };
+
+  const manejarSeleccionFecha = async (fechaFormateada) => {
+    await actualizarTiempoEntrega(detalleParaEditar, fechaFormateada);
+    cerrarModal();
+  };
+
+  const formatearFechaEntrega = (fecha) => {
+    if (!fecha) return "Sin definir";
+    const fechaObj = new Date(fecha + "T12:00:00"); // para evitar desfase por zona horaria
+    return fechaObj.toLocaleDateString("es-CR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const esHoy = (fechaStr) => {
+    if (!fechaStr) return false;
+    const hoy = new Date();
+    const fecha = new Date(fechaStr + "T12:00:00");
+
+    return (
+      hoy.getFullYear() === fecha.getFullYear() &&
+      hoy.getMonth() === fecha.getMonth() &&
+      hoy.getDate() === fecha.getDate()
+    );
   };
 
   if (cargandoPagina) {
@@ -229,10 +324,11 @@ export default function AdminDashboard() {
             <thead>
               <tr>
                 <th>Pedido</th>
-                <th>Fecha</th>
+                <th>Fecha De Solicitud</th>
                 <th>Cliente</th>
                 <th>Cédula</th>
                 <th>Estado</th>
+                <th>Fecha De Entrega</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -241,7 +337,9 @@ export default function AdminDashboard() {
                 <tr key={pedido.IdPedido}>
                   <td>{pedido.IdPedido}</td>
                   <td>{formatearFecha(pedido.FechaPedido)}</td>
-                  <td>{resaltarCoincidencia(pedido.NombreCliente, busqueda)}</td>
+                  <td>
+                    {resaltarCoincidencia(pedido.NombreCliente, busqueda)}
+                  </td>
                   <td>{resaltarCoincidencia(pedido.Cedula, busqueda)}</td>
                   <td>
                     {pedido.IdCotizacion ? (
@@ -284,11 +382,10 @@ export default function AdminDashboard() {
                       <span className="rol-badge sin-estado">Sin estado</span>
                     )}
                   </td>
+                  <td>{formatearFechaEntrega(pedido.TiempoEntrega)}</td>
                   <td>
                     {pedido.IdCotizacion ? (
-                      ["Aceptada", "Rechazada"].includes(pedido.Estado) ? (
-                        <span className="text-muted">—</span>
-                      ) : editandoPedidoId === pedido.IdPedido ? (
+                      editandoPedidoId === pedido.IdPedido ? (
                         <button
                           className="btn btn-success"
                           onClick={async () => {
@@ -305,18 +402,36 @@ export default function AdminDashboard() {
                           <FaCheck />
                         </button>
                       ) : (
-                        <button
-                          className="btn btn-primary"
-                          onClick={() => {
-                            setEditandoPedidoId(pedido.IdPedido);
-                            setEstadosTemporales((prev) => ({
-                              ...prev,
-                              [pedido.IdPedido]: pedido.Estado || "Pendiente",
-                            }));
-                          }}
-                        >
-                          <FaEdit />
-                        </button>
+                        <div className="d-flex gap-2">
+                          {/* Solo mostrar botón de editar si NO es Aceptada */}
+                          {pedido.Estado?.toLowerCase() !== "aceptada" && (
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => {
+                                setEditandoPedidoId(pedido.IdPedido);
+                                setEstadosTemporales((prev) => ({
+                                  ...prev,
+                                  [pedido.IdPedido]:
+                                    pedido.Estado || "Pendiente",
+                                }));
+                              }}
+                            >
+                              <FaEdit />
+                            </button>
+                          )}
+
+                          {/* Solo mostrar reloj si es Aceptada */}
+                          {pedido.Estado?.toLowerCase() === "aceptada" && (
+                            <button
+                              className="btn tiempo-btn"
+                              onClick={() => abrirModal(pedido.IdDetalle)}
+                              title="Asignar fecha de entrega"
+                              disabled={esHoy(pedido.TiempoEntrega)}
+                            >
+                              <FaClock />
+                            </button>
+                          )}
+                        </div>
                       )
                     ) : (
                       <span className="text-muted">—</span>
@@ -338,10 +453,12 @@ export default function AdminDashboard() {
                   <strong>Fecha:</strong> {formatearFecha(pedido.FechaPedido)}
                 </p>
                 <p>
-                  <strong>Cliente:</strong> {resaltarCoincidencia(pedido.NombreCliente, busqueda)}
+                  <strong>Cliente:</strong>{" "}
+                  {resaltarCoincidencia(pedido.NombreCliente, busqueda)}
                 </p>
                 <p>
-                  <strong>Cédula:</strong> {resaltarCoincidencia(pedido.Cedula, busqueda)}
+                  <strong>Cédula:</strong>{" "}
+                  {resaltarCoincidencia(pedido.Cedula, busqueda)}
                 </p>
                 <p>
                   <strong>Estado:</strong>
@@ -371,10 +488,12 @@ export default function AdminDashboard() {
                     </span>
                   )}
                 </p>
+                <p>
+                  <strong>Fecha Entrega:</strong>{" "}
+                  {formatearFechaEntrega(pedido.TiempoEntrega)}
+                </p>
                 <div className="pedido-acciones">
-                  {["Aceptada", "Rechazada"].includes(pedido.Estado) ? (
-                    <span className="text-muted">—</span>
-                  ) : editandoPedidoId === pedido.IdPedido ? (
+                  {editandoPedidoId === pedido.IdPedido ? (
                     <button
                       className="btn btn-success"
                       onClick={async () => {
@@ -390,18 +509,35 @@ export default function AdminDashboard() {
                       <FaCheck /> Guardar
                     </button>
                   ) : (
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => {
-                        setEditandoPedidoId(pedido.IdPedido);
-                        setEstadosTemporales((prev) => ({
-                          ...prev,
-                          [pedido.IdPedido]: pedido.Estado || "Pendiente",
-                        }));
-                      }}
-                    >
-                      <FaEdit /> Editar
-                    </button>
+                    <div className="d-flex gap-2">
+                      {/* Botón de editar solo si NO es aceptada */}
+                      {pedido.Estado?.toLowerCase() !== "aceptada" && (
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => {
+                            setEditandoPedidoId(pedido.IdPedido);
+                            setEstadosTemporales((prev) => ({
+                              ...prev,
+                              [pedido.IdPedido]: pedido.Estado || "Pendiente",
+                            }));
+                          }}
+                        >
+                          <FaEdit />
+                        </button>
+                      )}
+
+                      {/* Botón de reloj solo si es aceptada */}
+                      {pedido.Estado?.toLowerCase() === "aceptada" && (
+                        <button
+                          className="btn tiempo-btn"
+                          onClick={() => abrirModal(pedido.IdDetalle)}
+                          title="Editar tiempo de entrega"
+                          disabled={esHoy(pedido.TiempoEntrega)}
+                        >
+                          <FaClock />
+                        </button>
+                      )}
+                    </div>
                   )}
                 </div>
               </div>
@@ -433,6 +569,14 @@ export default function AdminDashboard() {
             previousClassName={"pagina"}
             nextClassName={"pagina"}
             disabledClassName={"deshabilitada"}
+          />
+
+          <FechaEntregaModal
+            show={mostrarModal}
+            onHide={cerrarModal}
+            onDateSelect={manejarSeleccionFecha}
+            fechaSeleccionada={fechaSeleccionada}
+            setFechaSeleccionada={setFechaSeleccionada}
           />
         </main>
       </div>

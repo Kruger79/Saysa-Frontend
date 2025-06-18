@@ -58,6 +58,26 @@ export default function Cotizaciones() {
     }, 1500); // puedes ajustar el tiempo según lo que dure tu piña
   };
 
+  const formatearFecha = (fecha) => {
+    if (!fecha) return "Sin definir";
+    const [año, mes, dia] = fecha.split("T")[0].split("-");
+    const meses = [
+      "enero",
+      "febrero",
+      "marzo",
+      "abril",
+      "mayo",
+      "junio",
+      "julio",
+      "agosto",
+      "septiembre",
+      "octubre",
+      "noviembre",
+      "diciembre",
+    ];
+    return `${parseInt(dia)} de ${meses[parseInt(mes) - 1]} de ${año}`;
+  };
+
   if (cargandoPagina) {
     return <PinaLoader />;
   }
@@ -86,20 +106,32 @@ export default function Cotizaciones() {
               <thead>
                 <tr>
                   <th>ID Cotización</th>
-                  <th>Fecha</th>
+                  <th>Fecha De Solicitud</th>
                   <th>Estado</th>
                   <th>Total</th>
+                  <th>Fecha De Entrega</th>
                 </tr>
               </thead>
               <tbody>
                 {cotizacionesPaginadas.map((coti) => (
                   <tr key={coti.IdCotizacion}>
                     <td>{coti.IdCotizacion}</td>
-                    <td>
-                      {new Date(coti.FechaSolicitud).toLocaleDateString()}
-                    </td>
+                    <td>{formatearFecha(coti.FechaSolicitud)}</td>
                     <td>{coti.Estado}</td>
                     <td>₡{coti.Total ?? calcularTotal(coti.Detalles)}</td>
+                    <td>
+                      {coti.Detalles?.find((d) => d.TiempoEntrega)
+                        ?.TiempoEntrega
+                        ? new Date(
+                            coti.Detalles.find((d) => d.TiempoEntrega)
+                              .TiempoEntrega + "T12:00:00"
+                          ).toLocaleDateString("es-CR", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })
+                        : "Sin definir"}
+                    </td>
                   </tr>
                 ))}
               </tbody>
