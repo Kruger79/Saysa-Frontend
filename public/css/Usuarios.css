@@ -1,5 +1,5 @@
 .usuarios-page {
-  background: #ffffff;
+  background: #f9fafb;
   min-height: 100vh;
   padding-top: 70px;
 }
@@ -9,7 +9,7 @@
   /* Para no tapar el sidebar */
   padding: 4rem 2rem 2rem 2rem;
   min-height: 100vh;
-  background-color: #ffffff;
+  background-color: #f9fafb;
   display: flex;
   flex-direction: column;
   align-items: center;
