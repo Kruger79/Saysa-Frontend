@@ -1,6 +1,6 @@
 .admin-productos-page {
   display: flex;
-  background-color: #f4f7f9;
+  background-color: #ffffff;
   min-height: 100vh;
   font-family: "Segoe UI", sans-serif;
 }
@@ -277,7 +277,7 @@
   color: #1f2937;
   border-radius: 6px;
   border: 1px solid #ccc;
-  background-color: #f3f4f6;
+  background-color: #ffffff;
   transition: background-color 0.2s ease;
   white-space: nowrap;
   display: inline-flex;
