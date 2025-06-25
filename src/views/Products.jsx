@@ -37,7 +37,6 @@ export default function Productos() {
             <ProductoCard
               key={producto.IdProducto}
               producto={producto}
-              reverse={index % 2 !== 0}
             />
           ))
         ) : (
