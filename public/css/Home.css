@@ -57,6 +57,14 @@
   gap: 20px;
 }
 
+.cards-container a {
+  display: inline-block;
+  width: 220px;
+  text-decoration: none;
+  color: inherit;
+}
+
+
 .card {
   width: 220px;
   height: 320px;
@@ -135,6 +143,10 @@
 
 /* Móviles y pantallas pequeñas */
 @media (max-width: 768px) {
+
+  .cards-container a {
+  width: 90%;
+}
   .about-section {
     flex-direction: column;
     align-items: center;
