@@ -216,7 +216,7 @@ export default function AdminDashboard() {
 
           <div className="admin-stats">
             <div className="stat-card">
-              <h3>Pedidos pendientes</h3>
+              <h3>Pedidos no aceptados</h3>
               <p className="stat-number">
                 {
                   pedidos.filter((p) =>
@@ -228,7 +228,7 @@ export default function AdminDashboard() {
               </p>
             </div>
             <div className="stat-card">
-              <h3>Cotizaciones del mes</h3>
+              <h3>Pedidos aceptados</h3>
               <p className="stat-number">
                 {
                   pedidos.filter((p) =>
@@ -385,7 +385,9 @@ export default function AdminDashboard() {
                   <td>{formatearFechaEntrega(pedido.TiempoEntrega)}</td>
                   <td>
                     {pedido.IdCotizacion ? (
-                      editandoPedidoId === pedido.IdPedido ? (
+                      pedido.Estado?.toLowerCase() === "rechazada" ? (
+                        <span className="text-muted">—</span>
+                      ) : editandoPedidoId === pedido.IdPedido ? (
                         <button
                           className="btn btn-success"
                           onClick={async () => {
@@ -403,7 +405,6 @@ export default function AdminDashboard() {
                         </button>
                       ) : (
                         <div className="d-flex gap-2">
-                          {/* Solo mostrar botón de editar si NO es Aceptada */}
                           {pedido.Estado?.toLowerCase() !== "aceptada" && (
                             <button
                               className="btn btn-primary"
@@ -420,7 +421,6 @@ export default function AdminDashboard() {
                             </button>
                           )}
 
-                          {/* Solo mostrar reloj si es Aceptada */}
                           {pedido.Estado?.toLowerCase() === "aceptada" && (
                             <button
                               className="btn tiempo-btn"
@@ -493,7 +493,9 @@ export default function AdminDashboard() {
                   {formatearFechaEntrega(pedido.TiempoEntrega)}
                 </p>
                 <div className="pedido-acciones">
-                  {editandoPedidoId === pedido.IdPedido ? (
+                  {pedido.Estado?.toLowerCase() === "rechazada" ? (
+                    <span className="text-muted">—</span>
+                  ) : editandoPedidoId === pedido.IdPedido ? (
                     <button
                       className="btn btn-success"
                       onClick={async () => {
@@ -510,7 +512,6 @@ export default function AdminDashboard() {
                     </button>
                   ) : (
                     <div className="d-flex gap-2">
-                      {/* Botón de editar solo si NO es aceptada */}
                       {pedido.Estado?.toLowerCase() !== "aceptada" && (
                         <button
                           className="btn btn-primary"
@@ -526,7 +527,6 @@ export default function AdminDashboard() {
                         </button>
                       )}
 
-                      {/* Botón de reloj solo si es aceptada */}
                       {pedido.Estado?.toLowerCase() === "aceptada" && (
                         <button
                           className="btn tiempo-btn"

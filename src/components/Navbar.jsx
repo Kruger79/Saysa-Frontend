@@ -189,7 +189,7 @@ export default function Navbar() {
                   )}
 
                   {location.pathname === "/admin" ? (
-                    <span className="text-info fw-bold">Dashboard</span>
+                    <span className="text-info fw-bold">Gestion</span>
                   ) : location.pathname === "/admin/usuarios" ? (
                     <span className="text-info fw-bold">Usuarios</span>
                   ) : location.pathname === "/admin/productos" ? (
@@ -220,7 +220,7 @@ export default function Navbar() {
                           }`}
                           onClick={() => setShowAdminMenu(false)}
                         >
-                          Dashboard <FaTachometerAlt />
+                          Gestion <FaTachometerAlt />
                         </Link>
                       </li>
                     )}
