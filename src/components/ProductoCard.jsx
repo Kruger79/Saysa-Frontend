@@ -35,8 +35,12 @@ export default function ProductoCard({ producto, reverse }) {
 
       {/* Información del producto */}
       <div className="producto-card-info">
-        <h2>{producto.Nombre}</h2>
-        <p>{producto.Descripcion}</p>
+        <h5 className="nombre">
+          {producto.NombreResaltado ?? producto.Nombre}
+        </h5>
+        <p className="descripcion">
+          {producto.DescripcionResaltada ?? producto.Descripcion}
+        </p>
         <p className="precio">
           <strong>Precio:</strong> ₡{producto.Precio}
         </p>
