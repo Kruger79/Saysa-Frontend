@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { obtenerProductos } from "../api/productos";
+import { obtenerPedidos } from "../api/pedidos"; // Debes tener esta función
 import ProductoCard from "../components/ProductoCard";
 import Navbar from "../components/Navbar";
+import "react-datepicker/dist/react-datepicker.css";
 import "../../public/css/Products.css";
 
 // Función para resaltar coincidencias
@@ -17,14 +19,27 @@ function resaltarCoincidencia(texto, busqueda) {
 export default function Productos() {
   const [productos, setProductos] = useState([]);
   const [busqueda, setBusqueda] = useState("");
-  const [filtroPopularidad, setFiltroPopularidad] = useState("todos"); // Nuevo estado
+  const [filtroPopularidad, setFiltroPopularidad] = useState("todos");
+  const [conteoPedidos, setConteoPedidos] = useState({}); // Nuevo estado
 
   useEffect(() => {
-    async function cargarProductos() {
-      const data = await obtenerProductos();
-      setProductos(data);
+    async function cargarDatos() {
+      const productosData = await obtenerProductos();
+      setProductos(productosData);
+
+      // Obtener pedidos y contar productos
+      const pedidosData = await obtenerPedidos();
+      const conteo = {};
+      pedidosData.forEach((pedido) => {
+        // Suponiendo que cada pedido tiene un array de productos
+        pedido.Productos.forEach((prod) => {
+          const id = prod.IdProducto;
+          conteo[id] = (conteo[id] || 0) + (prod.cantidad || 1);
+        });
+      });
+      setConteoPedidos(conteo);
     }
-    cargarProductos();
+    cargarDatos();
   }, []);
 
   // Filtrar productos según la búsqueda
@@ -37,7 +52,7 @@ export default function Productos() {
   // Filtrar por popularidad si corresponde
   if (filtroPopularidad === "populares") {
     productosFiltrados = [...productosFiltrados].sort(
-      (a, b) => (b.CantidadPedidos || 0) - (a.CantidadPedidos || 0)
+      (a, b) => (conteoPedidos[b.IdProducto] || 0) - (conteoPedidos[a.IdProducto] || 0)
     );
   }
 
@@ -82,18 +97,12 @@ export default function Productos() {
           productosFiltrados.map((producto) => (
             <ProductoCard
               key={producto.IdProducto}
-<<<<<<< HEAD
               producto={{
                 ...producto,
                 NombreResaltado: resaltarCoincidencia(producto.Nombre, busqueda),
-                DescripcionResaltada: resaltarCoincidencia(
-                  producto.Descripcion,
-                  busqueda
-                ),
+                DescripcionResaltada: resaltarCoincidencia(producto.Descripcion, busqueda),
+                CantidadPedidos: conteoPedidos[producto.IdProducto] || 0, // Puedes mostrar esto si quieres
               }}
-=======
-              producto={producto}
->>>>>>> 2aa5bf8c0f29ad6e7b9881159c0406ff29358cb0
             />
           ))
         ) : (
