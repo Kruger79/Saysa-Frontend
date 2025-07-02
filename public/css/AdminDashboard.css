@@ -405,3 +405,17 @@
     transform: translateY(0) scale(1);
   }
 }
+
+.tiempo-btn {
+  background-color: #ffeb3b !important; /* amarillo */
+  color: black !important;              /* ícono negro */
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tiempo-btn:hover {
+  background-color: #fdd835 !important;
+  color: black !important;
+}

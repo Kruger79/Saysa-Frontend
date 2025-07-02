@@ -6,14 +6,14 @@
   align-items: center;
   min-height: 100vh;               /* Altura mínima segura */
   padding: 2rem 1rem;              /* Espacio para evitar recorte en móvil */
-  background: linear-gradient(135deg, #f0fdf4, #fefce8); /* Contraste tropical */
+  background: #ffff;
   box-sizing: border-box;
 }
 
 /* =================== TARJETA DE REGISTRO =================== */
 
 .register-card {
-  background: #fff;
+  background: #ffff;
   border-radius: 20px;
   padding: 2.5rem;
   width: 400px;

@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import { obtenerPrecioEnvio } from "../api/configuracion";
 import Navbar from "../components/Navbar";
 import { toast } from "react-toastify";
-import "../../public/css/Carrito.css"; 
+import "../../public/css/Carrito.css";
 
 export default function Carrito() {
   const [carrito, setCarrito] = useState([]);
   const [nombreFinca, setNombreFinca] = useState("");
-  const [tiempoEntrega, setTiempoEntrega] = useState("5 días");
   const [precioEnvio, setPrecioEnvio] = useState(0);
 
   useEffect(() => {
@@ -81,7 +80,6 @@ export default function Carrito() {
           cedula: usuario.Cedula,
           productos,
           nombreFinca,
-          tiempoEntrega,
           precioEnvio,
         }),
       });
@@ -148,7 +146,9 @@ export default function Carrito() {
                         <div className="d-flex justify-content-center align-items-center gap-2">
                           <button
                             className="btn btn-outline-secondary btn-sm"
-                            onClick={() => actualizarCantidad(index, item.cantidad - 1)}
+                            onClick={() =>
+                              actualizarCantidad(index, item.cantidad - 1)
+                            }
                             title="Disminuir"
                           >
                             −
@@ -159,14 +159,23 @@ export default function Carrito() {
                             max="100"
                             value={item.cantidad}
                             onChange={(e) =>
-                              actualizarCantidad(index, parseInt(e.target.value) || 1)
+                              actualizarCantidad(
+                                index,
+                                parseInt(e.target.value) || 1
+                              )
                             }
                             className="form-control"
-                            style={{ width: "70px", textAlign: "center", fontWeight: "bold" }}
+                            style={{
+                              width: "70px",
+                              textAlign: "center",
+                              fontWeight: "bold",
+                            }}
                           />
                           <button
                             className="btn btn-outline-secondary btn-sm"
-                            onClick={() => actualizarCantidad(index, item.cantidad + 1)}
+                            onClick={() =>
+                              actualizarCantidad(index, item.cantidad + 1)
+                            }
                             title="Aumentar"
                           >
                             +
@@ -209,7 +218,9 @@ export default function Carrito() {
                           <div className="d-flex gap-1">
                             <button
                               className="btn btn-outline-secondary btn-sm"
-                              onClick={() => actualizarCantidad(index, item.cantidad - 1)}
+                              onClick={() =>
+                                actualizarCantidad(index, item.cantidad - 1)
+                              }
                             >
                               −
                             </button>
@@ -219,14 +230,19 @@ export default function Carrito() {
                               max="100"
                               value={item.cantidad}
                               onChange={(e) =>
-                                actualizarCantidad(index, parseInt(e.target.value) || 1)
+                                actualizarCantidad(
+                                  index,
+                                  parseInt(e.target.value) || 1
+                                )
                               }
                               className="form-control text-center fw-bold"
                               style={{ width: "60px" }}
                             />
                             <button
                               className="btn btn-outline-secondary btn-sm"
-                              onClick={() => actualizarCantidad(index, item.cantidad + 1)}
+                              onClick={() =>
+                                actualizarCantidad(index, item.cantidad + 1)
+                              }
                             >
                               +
                             </button>
@@ -271,7 +287,9 @@ export default function Carrito() {
             </h5>
             <h4 className="text-end mt-2">
               Total: ₡
-              {(calcularTotal() + (carrito.length > 0 ? precioEnvio : 0)).toLocaleString()}
+              {(
+                calcularTotal() + (carrito.length > 0 ? precioEnvio : 0)
+              ).toLocaleString()}
             </h4>
 
             <div className="d-flex justify-content-center gap-3 mt-4">

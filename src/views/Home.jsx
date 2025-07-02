@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar";
 import "../../public/css/Home.css";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -29,32 +30,47 @@ export default function Home() {
         <div className="process-section">
           <h2>Proceso de Cotización</h2>
           <div className="cards-container">
-            <div className="card active">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn2xtOsxUkULZdXTc_De9JRJdVjit0tWMe5w&s"
-                alt="Registro"
-              />
-              <h3>Registrarse</h3>
-              <p>Crea tu cuenta fácilmente.</p>
-            </div>
+            <Link
+              to="/login"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <div className="card active">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn2xtOsxUkULZdXTc_De9JRJdVjit0tWMe5w&s"
+                  alt="Registro"
+                />
+                <h3>Registrarse</h3>
+                <p>Crea tu cuenta fácilmente.</p>
+              </div>
+            </Link>
 
-            <div className="card">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzWtopO5fMn-XVLseal1CnHIP4iFhfGnQj7Q&s"
-                alt="Seleccionar Productos"
-              />
-              <h3>Seleccionar Productos</h3>
-              <p>Agrega los productos que necesites al carrito.</p>
-            </div>
+            <Link
+              to="/products"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <div className="card">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzWtopO5fMn-XVLseal1CnHIP4iFhfGnQj7Q&s"
+                  alt="Seleccionar Productos"
+                />
+                <h3>Seleccionar Productos</h3>
+                <p>Agrega los productos que necesites al carrito.</p>
+              </div>
+            </Link>
 
-            <div className="card">
-              <img
-                src="https://cdn-icons-png.freepik.com/256/5952/5952806.png?semt=ais_hybrid"
-                alt="Confirmar Pedido"
-              />
-              <h3>Confirmar Pedido</h3>
-              <p>Finaliza tu pedido y nosotros nos encargamos.</p>
-            </div>
+            <Link
+              to="/carrito"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <div className="card">
+                <img
+                  src="https://cdn-icons-png.freepik.com/256/5952/5952806.png?semt=ais_hybrid"
+                  alt="Confirmar Pedido"
+                />
+                <h3>Confirmar Pedido</h3>
+                <p>Finaliza tu pedido y nosotros nos encargamos.</p>
+              </div>
+            </Link>
           </div>
         </div>
 

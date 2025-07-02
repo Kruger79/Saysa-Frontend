@@ -82,6 +82,7 @@ export default function Productos() {
           productosFiltrados.map((producto) => (
             <ProductoCard
               key={producto.IdProducto}
+<<<<<<< HEAD
               producto={{
                 ...producto,
                 NombreResaltado: resaltarCoincidencia(producto.Nombre, busqueda),
@@ -90,6 +91,9 @@ export default function Productos() {
                   busqueda
                 ),
               }}
+=======
+              producto={producto}
+>>>>>>> 2aa5bf8c0f29ad6e7b9881159c0406ff29358cb0
             />
           ))
         ) : (

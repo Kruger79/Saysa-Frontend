@@ -11,10 +11,8 @@ import PinaLoader from "../components/PinaLoader";
 
 function resaltarCoincidencia(texto, termino) {
   if (!termino) return texto;
-
   const regex = new RegExp(`(${termino})`, "gi");
   const partes = texto.split(regex);
-
   return partes.map((parte, i) =>
     parte.toLowerCase() === termino.toLowerCase() ? (
       <span key={i} style={{ backgroundColor: "#ffff00" }}>
@@ -33,6 +31,7 @@ export default function Usuarios() {
   const itemsPorPagina = 10;
   const [busqueda, setBusqueda] = useState("");
   const [cargandoPagina, setCargandoPagina] = useState(false);
+  const usuarioActual = JSON.parse(localStorage.getItem("usuario"));
 
   useEffect(() => {
     async function cargarUsuarios() {
@@ -58,11 +57,7 @@ export default function Usuarios() {
   const manejarCambioRol = async (IdUsuario, nuevoRol) => {
     try {
       const usuarioEditado = usuarios.find((u) => u.IdUsuario === IdUsuario);
-
-      if (!usuarioEditado) {
-        toast.error("Usuario no encontrado");
-        return;
-      }
+      if (!usuarioEditado) return toast.error("Usuario no encontrado");
 
       await actualizarRolUsuario(usuarioEditado.Cedula, nuevoRol);
 
@@ -89,16 +84,13 @@ export default function Usuarios() {
 
   const handlePageClick = ({ selected }) => {
     setCargandoPagina(true);
-
     setTimeout(() => {
-      setPaginaActual(selected); // ✅ se actualiza después de la animación
+      setPaginaActual(selected);
       setCargandoPagina(false);
-    }, 1500); // puedes ajustar el tiempo según lo que dure tu piña
+    }, 1500);
   };
 
-  if (cargandoPagina) {
-    return <PinaLoader />;
-  }
+  if (cargandoPagina) return <PinaLoader />;
 
   return (
     <div className="usuarios-page">
@@ -142,7 +134,8 @@ export default function Usuarios() {
                 <td>{resaltarCoincidencia(usuario.Cedula, busqueda)}</td>
                 <td>{usuario.Telefono}</td>
                 <td>
-                  {editandoPedidoId === usuario.IdUsuario ? (
+                  {editandoPedidoId === usuario.IdUsuario &&
+                  usuario.Cedula !== usuarioActual?.Cedula ? (
                     <select
                       value={usuario.Rol}
                       onChange={(e) =>
@@ -160,21 +153,23 @@ export default function Usuarios() {
                   )}
                 </td>
                 <td>
-                  {editandoPedidoId !== usuario.IdUsuario && (
-                    <button
-                      className="editar-boton"
-                      onClick={() => seteditandoPedidoId(usuario.IdUsuario)}
-                    >
-                      <FaEdit /> Editar Rol
-                    </button>
-                  )}
+                  {editandoPedidoId !== usuario.IdUsuario &&
+                    usuario.Cedula !== usuarioActual?.Cedula && (
+                      <button
+                        className="editar-boton"
+                        onClick={() =>
+                          seteditandoPedidoId(usuario.IdUsuario)
+                        }
+                      >
+                        <FaEdit /> Editar Rol
+                      </button>
+                    )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        {/* Tarjetas móviles */}
         <div className="usuarios-card-list d-md-none">
           {usuariosPaginados.map((usuario) => (
             <div className="usuario-card" key={usuario.IdUsuario}>
@@ -190,7 +185,8 @@ export default function Usuarios() {
               <p>
                 <strong>Teléfono:</strong> {usuario.Telefono}
               </p>
-              {editandoPedidoId === usuario.IdUsuario ? (
+              {editandoPedidoId === usuario.IdUsuario &&
+              usuario.Cedula !== usuarioActual?.Cedula ? (
                 <select
                   value={usuario.Rol}
                   onChange={(e) =>
@@ -206,19 +202,19 @@ export default function Usuarios() {
                   {usuario.Rol}
                 </span>
               )}
-              {editandoPedidoId !== usuario.IdUsuario && (
-                <button
-                  className="editar-boton"
-                  onClick={() => seteditandoPedidoId(usuario.IdUsuario)}
-                >
-                  <FaEdit /> Editar Rol
-                </button>
-              )}
+              {editandoPedidoId !== usuario.IdUsuario &&
+                usuario.Cedula !== usuarioActual?.Cedula && (
+                  <button
+                    className="editar-boton"
+                    onClick={() => seteditandoPedidoId(usuario.IdUsuario)}
+                  >
+                    <FaEdit /> Editar Rol
+                  </button>
+                )}
             </div>
           ))}
         </div>
 
-        {/* 📄 Paginación */}
         <ReactPaginate
           previousLabel={
             <span className="d-flex align-items-center gap-2 text-success">

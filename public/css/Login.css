@@ -6,14 +6,14 @@
   align-items: center;
   min-height: 100vh;                /* Altura mínima en lugar de fija */
   padding: 2rem 1rem;
-  background: linear-gradient(135deg, #fefce8, #f0fdf4);
+  background: #ffff;
   box-sizing: border-box;
 }
 
 /* =================== TARJETA DE LOGIN =================== */
 
 .login-card {
-  background: #fff;
+  background: #ffff;
   border-radius: 20px;
   padding: 2.5rem;
   width: 350px;
